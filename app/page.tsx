@@ -1,4 +1,4 @@
-import Image from "next/image";
+import ContactForm from "./contato/page";
 
 export default function Home() {
   return (

@@ -1,0 +1,17 @@
+@layer base {
+  :root {
+    /* Brand */
+    --color-brand: 14 124 102; /* #0E7C66 */
+    --color-brand-light: 31 191 154; /* #1FBF9A */
+    --color-brand-dark: 6 78 59; /* #064E3B */
+    --color-brand-accent: 45 212 191; /* #2DD4BF */
+
+    /* Backgrounds */
+    --color-bg: 11 18 32; /* #0B1220 */
+    --color-surface: 17 24 39; /* #111827 */
+
+    /* Text */
+    --color-text: 255 255 255;
+    --color-muted: 156 163 175;
+  }
+}
