@@ -6,22 +6,31 @@ export default function NossaHistoria() {
       aria-labelledby="nossa-historia"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* BLOCO CENTRALIZADO */}
         <div className="mx-auto max-w-3xl text-center">
           <h2 id="nossa-historia" className="text-3xl font-bold tracking-tight">
             Nossa história
           </h2>
 
           <p className="mt-6 text-lg text-gray-300">
-            Com mais de duas décadas de atuação, a Biarritz Sports construiu uma
-            trajetória sólida no mercado esportivo, participando da organização
-            de alguns dos principais eventos de corrida do país.
+            Fundada em 1993 e dirigida até hoje pela francesa Véronique Buisson
+            Masi, conselheira do Órgão Governamental do Turismo Francês para o
+            Brasil, com sede em Porto Alegre, RS, atendemos todo o mercado
+            brasileiro, tendo como objetivo alcançar os turistas de todo o país
+            graças à uma estreita parceria com agências de viagens, grupos de
+            corrida e profissionais do tênis e de outros esportes.
           </p>
 
           <p className="mt-4 text-lg text-gray-300">
-            A evolução constante dos processos, da equipe e da tecnologia sempre
-            esteve alinhada ao compromisso com a qualidade e o respeito ao
-            atleta.
+            A empresa, de razão social <strong>Buisson & Cia Ltda</strong>,
+            registrada no <strong>CADASTUR</strong> do Ministério do Turismo com
+            o número
+            <strong>94996931000135, CNPJ: 94.996.931/0001-35</strong>, código
+            <strong>IATA TIDS: 96180512, Inscrição Municipal: 4451171</strong>,
+            é parceira oficial da <strong>Atout France</strong>, orgão público
+            para a promoção do turismo francês no Brasil e foi distinguida em
+            2011 pelo
+            <strong>Office de Tourisme</strong> de Paris pelo seu forte suporte
+            e colaboração na promoção do `&qoute destino Paris `&qoute.
           </p>
         </div>
       </div>

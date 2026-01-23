@@ -6,7 +6,7 @@ export default function ContactForm() {
       {/* Cabeçalho */}
       <div className="mx-auto max-w-2xl text-center">
         <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-          Fale com a Biarritz Turismo
+          Fale com a Biarritz Turismo Sports
         </h1>
         <p className="mt-4 text-lg text-gray-400">
           Tem dúvidas, quer solicitar um orçamento ou saber mais sobre nossas
@@ -73,15 +73,6 @@ export default function ContactForm() {
               Telefone <span className="text-gray-400">(opcional)</span>
             </label>
             <div className="mt-2.5 flex rounded-md bg-white/5 outline outline-1 outline-white/10 focus-within:outline-2 focus-within:outline-indigo-500">
-              <div className="relative">
-                <select
-                  aria-label="País"
-                  className="h-full rounded-l-md bg-transparent py-2 pl-3 pr-8 text-gray-400 focus:outline-none"
-                >
-                  <option>BR</option>
-                </select>
-                <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              </div>
               <input
                 id="phone"
                 name="phone"

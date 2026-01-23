@@ -1,7 +1,6 @@
 import SobreNos from "@/components/sobre-nos";
-import Parceiros from "@/components/parceiros";
 import NossaHistoria from "@/components/história";
-import Filosofia from "@/components/valores";
+import Filosofia from "@/components/filosofia";
 
 export default function AboutPage() {
   return (
@@ -9,7 +8,6 @@ export default function AboutPage() {
       <SobreNos />
       <NossaHistoria />
       <Filosofia />
-      <Parceiros />
     </div>
   );
 }

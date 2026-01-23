@@ -6,10 +6,8 @@ export default function Filosofia() {
       aria-labelledby="filosofia"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* GRID apenas para alinhamento */}
         <div className="grid grid-cols-1">
-          {/* BLOCO À DIREITA, MAIS LARGO */}
-          <div className="ml-auto w-full max-w-5xl text-right xl:max-w-6xl">
+          <div className="ml-auto w-full max-w-5xl text-left xl:max-w-6xl">
             <h2
               id="filosofia"
               className="text-3xl font-bold tracking-tight text-gray-900"
