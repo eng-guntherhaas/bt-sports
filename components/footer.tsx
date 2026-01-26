@@ -1,4 +1,12 @@
+"use client";
+
 import { parceiros } from "@/data/sobreBiarritz";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFacebookF,
+  faInstagram,
+  faWhatsapp,
+} from "@fortawesome/free-brands-svg-icons";
 
 export default function Footer() {
   return (
@@ -32,40 +40,36 @@ export default function Footer() {
             </h2>
           </div>
 
-          {/* Instagram mock / embed */}
-          <div className="mb-10 rounded-lg border p-4">
-            <p className="text-sm font-semibold">biarritzturismosports</p>
-            <p className="mb-4 text-xs text-gray-500">
-              Biarritz Turismo Sports · 2.716 seguidores
-            </p>
-
-            <div className="grid grid-cols-3 gap-2">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="aspect-square bg-gray-200" />
-              ))}
-            </div>
+          {/* Instagram embed */}
+          <div className="my-10 flex justify-center">
+            <iframe
+              src="https://www.instagram.com/biarritzturismosports/embed"
+              width="320"
+              height="420"
+              className="rounded-md border"
+            />
           </div>
 
-          {/* Social links */}
-          <ul className="space-y-3 text-sm">
-            <li>
+          <ul className="space-y-3 text-md">
+            <li className="flex items-center gap-2">
+              <FontAwesomeIcon icon={faFacebookF} className="text-sm w-4 h-4" />
               <a href="https://www.facebook.com/biarritzturismosports/">
                 /biarritzturismosports
               </a>
             </li>
-            <li>
+            <li className="flex items-center gap-2">
+              <FontAwesomeIcon icon={faInstagram} className="text-sm w-4 h-4" />
               <a href="https://www.instagram.com/biarritzturismosports/">
                 @biarritzturismosports
               </a>
             </li>
-            <li>
+            <li className="flex items-center gap-2">
+              <FontAwesomeIcon icon={faWhatsapp} className="text-sm w-4 h-4" />
               <a href="https://api.whatsapp.com/send?phone=5551981442091&text=Ol%C3%A1!%20Tenho%20interesse%20em%20um%20pacote%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es.%20Pode%20me%20ajudar?">
                 51 98144-2091
               </a>
             </li>
           </ul>
-
-          {/* Phone */}
           <p className="mt-12 text-3xl font-bold">(51) 3026.2233</p>
         </div>
       </div>
