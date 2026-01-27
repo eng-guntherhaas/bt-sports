@@ -30,19 +30,19 @@ export default function HeaderAdmin() {
           {/* 🌍 Área pública */}
           <div className="flex gap-x-6">
             <Link
-              href="/sobre"
+              href="/admin/sobre"
               className="text-sm font-semibold text-gray-900 hover:text-gray-600"
             >
               Sobre nós
             </Link>
             <Link
-              href="/pacotes"
+              href="/admin/pacotes"
               className="text-sm font-semibold text-gray-900 hover:text-gray-600"
             >
               Pacotes
             </Link>
             <Link
-              href="/contato"
+              href="/admin/contato"
               className="text-sm font-semibold text-gray-900 hover:text-gray-600"
             >
               Contato
