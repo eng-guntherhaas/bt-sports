@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import Image from "next/image";
 
 async function getPacotes(orderBy: "nome" | "data") {
   return prisma.pacote.findMany({
@@ -15,9 +16,11 @@ export const dynamic = "force-dynamic";
 export default async function AdminPacotes({
   searchParams,
 }: {
-  searchParams: { order?: string };
+  searchParams: Promise<{ order?: string }>;
 }) {
-  const order = searchParams.order === "data" ? "data" : "nome";
+  const params = await searchParams;
+
+  const order = params.order === "data" ? "data" : "nome";
   const pacotes = await getPacotes(order);
 
   return (
@@ -57,7 +60,7 @@ export default async function AdminPacotes({
         {/* ➕ Novo pacote */}
         <Link
           href="/admin/pacotes/novo"
-          className="flex aspect-[3/4] items-center justify-center rounded-lg border-2 border-dashed border-gray-300 text-gray-400 hover:border-gray-900 hover:text-gray-900"
+          className="flex aspect-[4/3] items-center justify-center rounded-lg border-2 border-dashed border-gray-300 text-gray-400 hover:border-gray-900 hover:text-gray-900"
         >
           <span className="text-5xl font-light">+</span>
         </Link>
@@ -71,7 +74,7 @@ export default async function AdminPacotes({
               {/* Imagem */}
               <div className="aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-200">
                 {capa ? (
-                  <img
+                  <Image
                     src={capa.url}
                     alt={capa.descricao ?? pacote.nome}
                     className="h-full w-full object-cover group-hover:opacity-80"

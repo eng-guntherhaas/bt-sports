@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 type AspectRatio = "16:9" | "4:3" | "21:9" | "auto";
 
@@ -24,6 +25,7 @@ export default function UploadImagem({
   ========================= */
   useEffect(() => {
     if (!value) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPreviewUrl(null);
       return;
     }
@@ -71,7 +73,9 @@ export default function UploadImagem({
       ) : (
         <div className="space-y-3">
           {previewUrl && (
-            <img
+            <Image
+              width={800}
+              height={600}
               src={previewUrl}
               alt={`Preview ${label}`}
               className={`w-full rounded-md object-cover ${aspectClass}`}
