@@ -1,6 +1,6 @@
-import SobreNos from "@/components/sobre-nos";
-import NossaHistoria from "@/components/história";
-import Filosofia from "@/components/filosofia";
+import SobreNos from "@/components/about/sobre-nos";
+import NossaHistoria from "@/components/about/história";
+import Filosofia from "@/components/about/filosofia";
 
 export default function AboutPage() {
   return (

@@ -1,17 +1,15 @@
 import { prisma } from "@/lib/prisma";
-import Image from "next/image";
+import Link from "next/link";
+import PacoteCard from "@/components/pacotes/pacote-card";
+
+export const dynamic = "force-dynamic";
 
 async function getPacotes(orderBy: "nome" | "data") {
   return prisma.pacote.findMany({
-    include: {
-      fotos: true,
-    },
+    include: { fotos: true },
     orderBy: orderBy === "nome" ? { nome: "asc" } : { data_inicio: "asc" },
   });
 }
-
-import Link from "next/link";
-export const dynamic = "force-dynamic";
 
 export default async function AdminPacotes({
   searchParams,
@@ -19,24 +17,40 @@ export default async function AdminPacotes({
   searchParams: Promise<{ order?: string }>;
 }) {
   const params = await searchParams;
-
   const order = params.order === "data" ? "data" : "nome";
+
   const pacotes = await getPacotes(order);
 
+  const mockPacotes = [
+    {
+      id: "mock-1",
+      nome: "Maratona de Paris 2025",
+      resumo: "Pacote completo com inscrição, hotel e transfers.",
+      preco: 12990,
+      imageUrl: "https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf",
+    },
+    {
+      id: "mock-2",
+      nome: "Roland Garros Experience",
+      resumo: "Experiência premium para fãs de tênis em Paris.",
+      preco: 18900,
+      imageUrl: "https://images.unsplash.com/photo-1521412644187-c49fa049e84d",
+    },
+  ];
+
   return (
-    <div className="bg-white px-6 py-10">
+    <div className="bg-admin min-h-screen px-6 py-10">
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Pacotes de Viagem</h1>
+        <h1 className="text-2xl font-bold text-admin">Pacotes de Viagem</h1>
 
-        {/* Ordenação */}
         <div className="flex gap-3">
           <Link
             href="/admin/pacotes?order=nome"
-            className={`rounded px-4 py-2 text-sm ${
+            className={`rounded-md px-4 py-2 text-sm font-medium ${
               order === "nome"
-                ? "bg-gray-900 text-white"
-                : "bg-gray-100 text-gray-700"
+                ? "bg-brand text-on-brand"
+                : "bg-surface text-admin-muted hover:bg-brand-soft"
             }`}
           >
             Ordem alfabética
@@ -44,10 +58,10 @@ export default async function AdminPacotes({
 
           <Link
             href="/admin/pacotes?order=data"
-            className={`rounded px-4 py-2 text-sm ${
+            className={`rounded-md px-4 py-2 text-sm font-medium ${
               order === "data"
-                ? "bg-gray-900 text-white"
-                : "bg-gray-100 text-gray-700"
+                ? "bg-brand text-on-brand"
+                : "bg-surface text-admin-muted hover:bg-brand-soft"
             }`}
           >
             Data do evento
@@ -56,63 +70,81 @@ export default async function AdminPacotes({
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-        {/* ➕ Novo pacote */}
+      <div
+        className="
+          grid gap-6
+          grid-cols-[repeat(auto-fill,minmax(260px,1fr))]
+        "
+      >
+        {/* Novo pacote */}
         <Link
           href="/admin/pacotes/novo"
-          className="flex aspect-[4/3] items-center justify-center rounded-lg border-2 border-dashed border-gray-300 text-gray-400 hover:border-gray-900 hover:text-gray-900"
+          className="
+    group relative
+    aspect-[4/3]
+    overflow-hidden
+    rounded-xl
+    border-2 border-dashed border-border-muted
+    bg-surface
+    transition
+    hover:-translate-y-0.5
+    hover:shadow-lg
+  "
         >
-          <span className="text-5xl font-light">+</span>
+          {/* Overlay igual aos cards */}
+          <div
+            className="
+      pointer-events-none
+      absolute inset-0
+      bg-brand-soft/60
+      opacity-0
+      transition-opacity
+      group-hover:opacity-100
+    "
+          />
+
+          <div className="relative z-10 flex h-full items-center justify-center">
+            <span
+              className="
+        text-5xl font-light
+        text-admin-muted
+        transition
+        group-hover:text-brand
+      "
+            >
+              +
+            </span>
+          </div>
         </Link>
 
-        {/* Pacotes */}
+        {/* Mocks */}
+        {mockPacotes.map((p) => (
+          // eslint-disable-next-line react/jsx-key
+          <PacoteCard
+            nome="Maratona de Paris 2025"
+            resumo="Pacote completo com inscrição, hotel e transfers."
+            preco={12990}
+            dataEvento="Abril 2025"
+            imageUrl="https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf"
+            href="/pacotes/maratona-paris-2025"
+            badge="mock"
+          />
+        ))}
+
+        {/* Reais */}
         {pacotes.map((pacote) => {
-          const capa = pacote.fotos.find((foto) => foto.tipo === "capa");
+          const capa = pacote.fotos.find((f) => f.tipo === "capa");
 
           return (
-            <div key={pacote.id} className="group relative">
-              {/* Imagem */}
-              <div className="aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-200">
-                {capa ? (
-                  <Image
-                    src={capa.url}
-                    alt={capa.descricao ?? pacote.nome}
-                    className="h-full w-full object-cover group-hover:opacity-80"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center text-gray-400">
-                    Sem imagem
-                  </div>
-                )}
-              </div>
-
-              {/* Conteúdo */}
-              <div className="mt-4 space-y-1">
-                <h3 className="text-sm font-semibold text-gray-900">
-                  {pacote.nome}
-                </h3>
-
-                {pacote.resumo && (
-                  <p className="text-sm text-gray-500 line-clamp-2">
-                    {pacote.resumo}
-                  </p>
-                )}
-
-                {pacote.preco && (
-                  <p className="text-sm font-medium text-gray-900">
-                    R$ {pacote.preco.toFixed(2)}
-                  </p>
-                )}
-              </div>
-
-              {/* Ação */}
-              <Link
-                href={`/admin/pacotes/${pacote.id}`}
-                className="absolute inset-0"
-              >
-                <span className="sr-only">Editar pacote</span>
-              </Link>
-            </div>
+            <PacoteCard
+              key={pacote.id}
+              href={`/admin/pacotes/${pacote.id}`}
+              nome={pacote.nome}
+              resumo={pacote.resumo ?? undefined}
+              preco={pacote.preco ?? undefined}
+              imageUrl={capa?.url}
+              variant="admin"
+            />
           );
         })}
       </div>

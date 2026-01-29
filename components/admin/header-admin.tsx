@@ -10,17 +10,20 @@ export default function HeaderAdmin() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white border-b border-gray-200">
+    <header className="bg-admin border-b border-admin">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="font-bold text-gray-900">
+        <Link href="/" className="font-bold text-admin">
           Biarritz Turismo Sports
+          <span className="ml-2 text-xs font-medium text-admin-muted">
+            admin
+          </span>
         </Link>
 
         {/* Mobile menu button */}
         <button
           onClick={() => setMobileMenuOpen(true)}
-          className="lg:hidden text-gray-700"
+          className="lg:hidden text-admin-muted text-admin-hover"
         >
           <Bars3Icon className="size-6" />
         </button>
@@ -31,38 +34,38 @@ export default function HeaderAdmin() {
           <div className="flex gap-x-6">
             <Link
               href="/admin/sobre"
-              className="text-sm font-semibold text-gray-900 hover:text-gray-600"
+              className="text-sm font-semibold text-admin-muted text-admin-hover"
             >
               Sobre nós
             </Link>
             <Link
               href="/admin/pacotes"
-              className="text-sm font-semibold text-gray-900 hover:text-gray-600"
+              className="text-sm font-semibold text-admin-muted text-admin-hover"
             >
               Pacotes
             </Link>
             <Link
-              href="/admin/contato"
-              className="text-sm font-semibold text-gray-900 hover:text-gray-600"
+              href="/contato"
+              className="text-sm font-semibold text-admin-muted text-admin-hover"
             >
               Contato
             </Link>
           </div>
 
           {/* 🔒 Separador */}
-          <div className="h-6 w-px bg-gray-300" />
+          <div className="h-6 w-px bg-border-admin" />
 
           {/* 🧑‍💼 Área admin */}
           <div className="flex gap-x-6 items-center">
             <Link
               href="/admin"
-              className="text-sm font-semibold text-gray-900 hover:text-gray-600"
+              className="text-sm font-semibold text-admin text-admin-hover"
             >
               Dashboard
             </Link>
             <Link
               href="/admin/users"
-              className="text-sm font-semibold text-gray-900 hover:text-gray-600"
+              className="text-sm font-semibold text-admin text-admin-hover"
             >
               Usuários
             </Link>
@@ -72,7 +75,7 @@ export default function HeaderAdmin() {
                   callbackUrl: "/admin/login",
                 })
               }
-              className="text-sm font-semibold text-red-600 hover:text-red-500"
+              className="text-sm font-semibold text-danger text-danger-hover"
             >
               Logout
             </button>
@@ -86,30 +89,36 @@ export default function HeaderAdmin() {
         onClose={setMobileMenuOpen}
         className="lg:hidden"
       >
-        <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full bg-white p-6 sm:max-w-sm">
+        <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full bg-admin p-6 sm:max-w-sm">
           <div className="flex items-center justify-between">
-            <Link href="/" className="font-bold text-gray-900">
+            <Link href="/" className="font-bold text-admin">
               Biarritz Turismo Sports
+              <span className="ml-2 text-xs font-medium text-admin-muted">
+                admin
+              </span>
             </Link>
-            <button onClick={() => setMobileMenuOpen(false)}>
-              <XMarkIcon className="size-6 text-gray-700" />
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-admin-muted text-admin-hover"
+            >
+              <XMarkIcon className="size-6" />
             </button>
           </div>
 
           <div className="mt-6 space-y-6">
             {/* Público */}
             <div>
-              <p className="text-xs font-semibold uppercase text-gray-400">
+              <p className="text-xs font-semibold uppercase text-admin-muted">
                 Site
               </p>
               <div className="mt-2 space-y-2">
-                <Link href="/sobre" className="block text-gray-900">
+                <Link href="/sobre" className="block text-admin-hover">
                   Sobre nós
                 </Link>
-                <Link href="/pacotes" className="block text-gray-900">
+                <Link href="/pacotes" className="block text-admin-hover">
                   Pacotes
                 </Link>
-                <Link href="/contato" className="block text-gray-900">
+                <Link href="/contato" className="block text-admin-hover">
                   Contato
                 </Link>
               </div>
@@ -117,14 +126,14 @@ export default function HeaderAdmin() {
 
             {/* Admin */}
             <div>
-              <p className="text-xs font-semibold uppercase text-gray-400">
+              <p className="text-xs font-semibold uppercase text-admin-muted">
                 Administração
               </p>
               <div className="mt-2 space-y-2">
-                <Link href="/admin" className="block text-gray-900">
+                <Link href="/admin" className="block text-admin-hover">
                   Dashboard
                 </Link>
-                <Link href="/admin/users" className="block text-gray-900">
+                <Link href="/admin/users" className="block text-admin-hover">
                   Usuários
                 </Link>
                 <button
@@ -133,7 +142,7 @@ export default function HeaderAdmin() {
                       callbackUrl: "/admin/login",
                     })
                   }
-                  className="block text-left text-red-600"
+                  className="block text-left text-danger text-danger-hover"
                 >
                   Logout
                 </button>

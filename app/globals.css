@@ -5,71 +5,201 @@ Base Design Tokens
 ========================= */
 @layer base {
   :root {
-    /* Brand – deixa o teal mais sério */
-    --color-brand: #0f766e; /* ok */
-    --color-brand-dark: #0d5c57;
-    --color-brand-light: #99f6e4; /* teal-200 */
-    --color-brand-accent: #5eead4;
+    /* ================= Backgrounds ================= */
+    --color-bg: #f8fafc;
+    --color-surface: #ffffff;
+    --color-surface-muted: #f1f5f9;
 
-    /* Backgrounds */
-    --color-bg: #f1f5f9; /* slate-100 */
-    --color-surface: #ffffff; /* cards brancos */
+    /* ================= Brand ================= */
+    --color-brand: #6ac485;
+    --color-brand-dark: #4fa96a;
+    --color-brand-soft: #e8f6ee;
+    --color-brand-accent: #9ee3b5;
 
-    /* Text */
-    --color-text: #020617; /* slate-950 */
-    --color-muted: #64748b; /* slate-500 */
+    /* ================= Text ================= */
+    --color-text: #0f172a;
+    --color-text-muted: #64748b;
+    --color-text-on-brand: #ffffff;
 
-    /* Border */
-    --color-border: #e2e8f0; /* slate-200 */
+    /* ================= Border ================= */
+    --color-border: #e2e8f0;
+    --color-border-muted: #cbd5e1;
+
+    /* ================= Status ================= */
+    --color-success: #22c55e;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
   }
 
-  /* ================= Utilities ================= */
-  @layer utilities {
-    .bg-surface {
-      background-color: var(--color-surface);
-    }
-
-    .bg-brand {
-      background-color: var(--color-brand);
-    }
-
-    .bg-brand-hover:hover {
-      background-color: var(--color-brand-dark);
-    }
-
-    .text-brand {
-      color: var(--color-brand);
-    }
-
-    .text-muted {
-      color: var(--color-muted);
-    }
-
-    .border-default {
-      border-color: rgb(var(--color-muted) / 0.15);
-    }
-
-    .focus-ring-brand:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px var(--color-brand-accent);
-    }
-
-    .text-on-brand {
-      color: var(--color-bg);
-    }
-
-    .hover-surface:hover {
-      background-color: var(--color-surface);
-    }
-  }
-
-  /* =========================
-Base styles
-========================= */
   body {
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Inter, Arial, Helvetica, sans-serif;
     @apply antialiased;
+  }
+}
+
+/* =========================
+Utilities (Design System)
+========================= */
+@layer utilities {
+  /* ================= Backgrounds ================= */
+  .bg-surface {
+    background-color: var(--color-surface);
+  }
+
+  .bg-surface-muted {
+    background-color: var(--color-surface-muted);
+  }
+
+  .bg-brand {
+    background-color: var(--color-brand);
+  }
+
+  .bg-brand-dark {
+    background-color: var(--color-brand-dark);
+  }
+
+  .bg-brand-soft {
+    background-color: var(--color-brand-soft);
+  }
+
+  /* Background hover */
+  .bg-brand-hover:hover {
+    background-color: var(--color-brand);
+  }
+
+  .bg-brand-dark-hover:hover {
+    background-color: var(--color-brand-dark);
+  }
+
+  .bg-brand-soft-hover:hover {
+    background-color: var(--color-brand-soft);
+  }
+
+  .bg-surface-hover:hover {
+    background-color: var(--color-surface);
+  }
+
+  .bg-surface-muted-hover:hover {
+    background-color: var(--color-surface-muted);
+  }
+
+  /* ================= Text ================= */
+  .text-brand {
+    color: var(--color-brand);
+  }
+
+  .text-muted {
+    color: var(--color-text-muted);
+  }
+
+  .text-on-brand {
+    color: var(--color-text-on-brand);
+  }
+
+  /* Text hover */
+  .text-brand-hover:hover {
+    color: var(--color-brand);
+  }
+
+  .text-brand-dark-hover:hover {
+    color: var(--color-brand-dark);
+  }
+
+  .text-muted-hover:hover {
+    color: var(--color-text-muted);
+  }
+
+  .text-default-hover:hover {
+    color: var(--color-text);
+  }
+
+  /* ================= Borders ================= */
+  .border-default {
+    border-color: var(--color-border);
+  }
+
+  .border-muted {
+    border-color: var(--color-border-muted);
+  }
+
+  .border-brand {
+    border-color: var(--color-brand);
+  }
+
+  /* Border hover */
+  .border-brand-hover:hover {
+    border-color: var(--color-brand);
+  }
+
+  .border-muted-hover:hover {
+    border-color: var(--color-border-muted);
+  }
+
+  /* ================= Focus / Ring ================= */
+  .focus-ring-brand:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-brand-accent);
+  }
+
+  .focus-ring-brand-hover:hover {
+    box-shadow: 0 0 0 3px var(--color-brand-accent);
+  }
+
+  /* ================= Opacity / Subtle ================= */
+  .opacity-hover:hover {
+    opacity: 0.85;
+  }
+
+  .opacity-soft-hover:hover {
+    opacity: 0.7;
+  }
+
+  /* ================= Generic Helpers ================= */
+  .hover-surface:hover {
+    background-color: var(--color-surface-muted);
+  }
+
+  .hover-brand-soft:hover {
+    background-color: var(--color-brand-soft);
+  }
+}
+
+/* =========================
+Admin (Área Restrita)
+========================= */
+@layer utilities {
+  /* Background admin */
+  .bg-admin {
+    background-color: var(--color-surface-muted);
+  }
+
+  /* Text admin */
+  .text-admin {
+    color: var(--color-text);
+  }
+
+  .text-admin-muted {
+    color: var(--color-text-muted);
+  }
+
+  /* Hover admin */
+  .text-admin-hover:hover {
+    color: var(--color-brand-dark);
+  }
+
+  /* Separador admin */
+  .border-admin {
+    border-color: var(--color-border-muted);
+  }
+
+  /* Danger (logout, destructive) */
+  .text-danger {
+    color: var(--color-error);
+  }
+
+  .text-danger-hover:hover {
+    color: #dc2626; /* vermelho um pouco mais forte */
   }
 }

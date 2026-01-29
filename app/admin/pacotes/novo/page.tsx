@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import UploadImagem from "@/components/admin/UploadImagem";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 
 /* ================= UI Helpers ================= */
+
+const inputBase =
+  "mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default text-admin focus-ring-brand";
 
 function Section({
   title,
@@ -16,22 +19,15 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section
-      className="
-rounded-2xl
-border border-default
-bg-white
-p-6
-shadow-sm
-"
-    >
+    <section className="rounded-2xl border border-default bg-surface p-6 shadow-sm">
       <div className="mb-4">
-        <h2 className="text-lg font-semibold text-(--color-text)">{title}</h2>
+        <h2 className="text-lg font-semibold text-admin">{title}</h2>
         {description && (
-          <p className="mt-1 text-sm text-muted">{description}</p>
+          <p className="mt-1 text-sm text-admin-muted">{description}</p>
         )}
       </div>
-      <div className="space-y-4">{children}</div>
+
+      <div className="space-y-5">{children}</div>
     </section>
   );
 }
@@ -49,17 +45,17 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-(--color-text)">
-        {label} {required && <span className="text-red-500">*</span>}
+      <label className="block text-sm font-semibold text-admin">
+        {label} {required && <span className="text-brand">*</span>}
       </label>
       {children}
-      {hint && <p className="mt-1 text-xs text-muted">{hint}</p>}
+      {hint && <p className="mt-1 text-xs text-admin-muted">{hint}</p>}
     </div>
   );
 }
 
 function Divider() {
-  return <div className="h-px bg-[rgb(var(--color-muted)/0.15)]" />;
+  return <div className="h-px bg-border-muted" />;
 }
 
 function StickyActions({
@@ -77,20 +73,22 @@ function StickyActions({
         <button
           type="submit"
           disabled={loading}
-          className="
+          className={`
             inline-flex items-center gap-2 rounded-md
-            bg-(--color-brand)
-            px-6 py-2
-            text-(--color-bg)
-            hover:bg-(--color-brand-dark)
-            focus:ring-2 focus:ring-(--color-brand-accent)
-            disabled:cursor-not-allowed disabled:opacity-50
-          "
+            px-6 py-2 text-sm font-semibold
+            ${
+              loading
+                ? "bg-brand-soft text-muted"
+                : "bg-brand text-on-brand bg-brand-dark-hover"
+            }
+            focus-ring-brand
+            disabled:cursor-not-allowed
+          `}
         >
           {loading && (
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-(--color-bg)/30 border-t-(--color-bg)" />
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-on-brand/30 border-t-on-brand" />
           )}
-          <span>{loading ? loadingMessage : "Salvar pacote"}</span>
+          {loading ? loadingMessage : "Salvar pacote"}
         </button>
 
         <button
@@ -99,10 +97,9 @@ function StickyActions({
           disabled={loading}
           className="
             rounded-md border border-default
-            px-6 py-2
-            text-(--color-text)
-            hover:bg-surface
-            disabled:cursor-not-allowed disabled:opacity-50
+            px-6 py-2 text-sm font-semibold
+            text-admin hover-surface
+            disabled:opacity-50
           "
         >
           Cancelar
@@ -135,6 +132,7 @@ export default function NovoPacotePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // lógica de submit aqui
   };
 
   useEffect(() => {
@@ -145,171 +143,163 @@ export default function NovoPacotePage() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10 bg-(--color-bg)">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-(--color-white)">
-          Criar novo pacote
-        </h1>
-      </div>
-      <form onSubmit={handleSubmit} className="space-y-8">
-        <Section
-          title="Informações básicas"
-          description="Dados principais do pacote"
-        >
-          <Field label="Nome do pacote" required>
-            <input
-              name="nome"
-              required
-              placeholder="Ex: Itália Clássica"
-              className="w-full rounded-md border border-default px-3 py-2 focus:outline-none focus:ring-2 focus:ring-(--color-brand-light)"
-            />
-          </Field>
+    <div className="bg-admin min-h-screen">
+      <div className="mx-auto max-w-5xl px-6 py-10 space-y-8">
+        <header>
+          <h1 className="text-2xl font-semibold text-admin">
+            Criar novo pacote
+          </h1>
+        </header>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Field label="Categoria">
-              {!criandoCategoria ? (
-                <select
-                  value={categoriaSelecionada}
-                  onChange={(e) =>
-                    e.target.value === "nova"
-                      ? setCriandoCategoria(true)
-                      : setCategoriaSelecionada(
-                          e.target.value ? Number(e.target.value) : ""
-                        )
-                  }
-                  className="w-full rounded-md border border-default px-3 py-2 focus:outline-none focus:ring-2 focus:ring-(--color-brand-light)"
-                >
-                  <option value="">Selecione uma categoria</option>
-                  {categorias.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.nome}
-                    </option>
-                  ))}
-                  <option value="nova">Nova categoria +</option>
-                </select>
-              ) : (
-                <div className="space-y-3 rounded-md border border-default bg-surface p-4">
-                  <input
-                    value={novaCategoria}
-                    onChange={(e) => setNovaCategoria(e.target.value)}
-                    placeholder="Nome da nova categoria"
-                    className="w-full rounded-md border border-default px-3 py-2"
-                  />
-                  <div className="flex gap-3">
-                    <button
-                      type="button"
-                      onClick={novaCategoria}
-                      className="rounded-md bg-(--color-brand-light) px-4 py-2 text-sm text-(--color-bg) hover:bg-(--color-brand)"
-                    >
-                      Salvar
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setCriandoCategoria(false);
-                        setNovaCategoria("");
-                      }}
-                      className="text-sm text-muted hover:underline"
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </div>
-              )}
-            </Field>
-
-            <Field label="Data de início">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* ================= Informações básicas ================= */}
+          <Section
+            title="Informações básicas"
+            description="Dados principais do pacote"
+          >
+            <Field label="Nome do pacote" required>
               <input
-                name="data_inicio"
-                type="date"
-                className="w-full rounded-md border border-default px-3 py-2 focus:outline-none focus:ring-2 focus:ring-(--color-brand-light)"
-              />
-            </Field>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <Field label="Preço" required>
-              <input
-                name="preco"
-                type="number"
-                step="0.01"
-                min="0"
+                name="nome"
                 required
-                placeholder="0.00"
-                className="w-full rounded-md border border-default px-3 py-2 focus:outline-none focus:ring-2 focus:ring-(--color-brand-light)"
+                placeholder="Ex: Itália Clássica"
+                className={inputBase}
               />
             </Field>
-            <Field label="Moeda">
-              <select
-                name="moeda"
-                defaultValue="EUR"
-                className="rounded-md border border-default px-3 py-2 focus:outline-none focus:ring-2 focus:ring-(--color-brand-light)"
-              >
-                <option value="EUR">EUR</option>
-                <option value="USD">USD</option>
-                <option value="BRL">BRL</option>
-                <option value="GBP">GBP</option>
-              </select>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field label="Categoria">
+                {!criandoCategoria ? (
+                  <select
+                    value={categoriaSelecionada}
+                    onChange={(e) =>
+                      e.target.value === "nova"
+                        ? setCriandoCategoria(true)
+                        : setCategoriaSelecionada(
+                            e.target.value ? Number(e.target.value) : ""
+                          )
+                    }
+                    className={inputBase}
+                  >
+                    <option value="">Selecione uma categoria</option>
+                    {categorias.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.nome}
+                      </option>
+                    ))}
+                    <option value="nova">Nova categoria +</option>
+                  </select>
+                ) : (
+                  <div className="rounded-md border border-default bg-surface-muted p-4 space-y-3">
+                    <input
+                      value={novaCategoria}
+                      onChange={(e) => setNovaCategoria(e.target.value)}
+                      placeholder="Nome da nova categoria"
+                      className={inputBase}
+                    />
+                    <div className="flex gap-3">
+                      <button
+                        type="button"
+                        className="rounded-md bg-brand px-4 py-2 text-sm font-semibold text-on-brand bg-brand-dark-hover"
+                      >
+                        Salvar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCriandoCategoria(false);
+                          setNovaCategoria("");
+                        }}
+                        className="text-sm font-medium text-admin-muted hover:underline"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </Field>
+
+              <Field label="Data de início">
+                <input type="date" name="data_inicio" className={inputBase} />
+              </Field>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Field label="Preço" required>
+                <input
+                  name="preco"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  className={inputBase}
+                />
+              </Field>
+
+              <Field label="Moeda">
+                <select name="moeda" defaultValue="EUR" className={inputBase}>
+                  <option value="EUR">EUR</option>
+                  <option value="USD">USD</option>
+                  <option value="BRL">BRL</option>
+                  <option value="GBP">GBP</option>
+                </select>
+              </Field>
+            </div>
+          </Section>
+
+          {/* ================= Imagens ================= */}
+          <Section
+            title="Imagens"
+            description="Recomendamos seguir as proporções para melhor visualização"
+          >
+            <UploadImagem
+              label="Foto de capa (16:9)"
+              value={fotoCapa}
+              onChange={setFotoCapa}
+              aspect="16:9"
+            />
+            <UploadImagem
+              label="Imagem de destaque (4:3)"
+              value={fotoDestaque}
+              onChange={setFotoDestaque}
+              aspect="4:3"
+            />
+            <UploadImagem
+              label="Banner da página (21:9)"
+              value={fotoBanner}
+              onChange={setFotoBanner}
+              aspect="21:9"
+            />
+          </Section>
+
+          {/* ================= Conteúdo ================= */}
+          <Section title="Conteúdo" description="Textos exibidos ao usuário">
+            <Field label="Texto de destaque">
+              <textarea name="texto_destaque" rows={2} className={inputBase} />
             </Field>
-          </div>
-        </Section>
 
-        <Section
-          title="Imagens"
-          description="Recomendamos seguir as proporções para melhor visualização"
-        >
-          <UploadImagem
-            label="Foto de capa (16:9)"
-            value={fotoCapa}
-            onChange={setFotoCapa}
-            aspect="16:9"
-          />
-          <UploadImagem
-            label="Imagem de destaque (4:3)"
-            value={fotoDestaque}
-            onChange={setFotoDestaque}
-            aspect="4:3"
-          />
-          <UploadImagem
-            label="Banner da página (21:9)"
-            value={fotoBanner}
-            onChange={setFotoBanner}
-            aspect="21:9"
-          />
-        </Section>
+            <Field label="Resumo">
+              <textarea name="resumo" rows={3} className={inputBase} />
+            </Field>
 
-        <Section title="Conteúdo" description="Textos exibidos ao usuário">
-          <Field label="Texto de destaque">
-            <textarea
-              name="texto_destaque"
-              rows={2}
-              placeholder="Texto curto para destacar"
-              className="w-full rounded-md border border-default px-3 py-2 focus:outline-none focus:ring-2 focus:ring-(--color-brand-light)"
-            />
-          </Field>
-          <Field label="Resumo">
-            <textarea
-              name="resumo"
-              rows={3}
-              placeholder="Resumo do pacote"
-              className="w-full rounded-md border border-default px-3 py-2 focus:outline-none focus:ring-2 focus:ring-(--color-brand-light)"
-            />
-          </Field>
-          <Divider />
-          <Field label="Descrição completa">
-            <RichTextEditor value={descricao} onChange={setDescricao} />
-          </Field>
-        </Section>
+            <Divider />
 
-        <StickyActions
-          loading={loading}
-          loadingMessage={loadingMessage}
-          onCancel={() => {
-            if (confirm("Deseja cancelar? Todas as alterações serão perdidas."))
-              window.location.href = "/admin/pacotes";
-          }}
-        />
-      </form>
+            <Field label="Descrição completa">
+              <RichTextEditor value={descricao} onChange={setDescricao} />
+            </Field>
+          </Section>
+
+          <StickyActions
+            loading={loading}
+            loadingMessage={loadingMessage}
+            onCancel={() => {
+              if (
+                confirm("Deseja cancelar? Todas as alterações serão perdidas.")
+              ) {
+                window.location.href = "/admin/pacotes";
+              }
+            }}
+          />
+        </form>
+      </div>
     </div>
   );
 }

@@ -26,21 +26,21 @@ export default function CategoriasCarousel({
 
   return (
     <div className="mx-auto max-w-7xl">
-      <div className="grid grid-cols-7 gap-3 items-center">
+      <div className="grid grid-cols-7 gap-4 items-center">
         {hasNavigation && (
           <button
             id="prev"
             className="
-          aspect-square
-          w-full
-          flex items-center justify-center
-          rounded-lg
-          bg-gray-100
-          text-gray-900
-          text-3xl
-          hover:bg-gray-200
-          transition
-        "
+              aspect-square
+              w-20
+              flex items-center justify-center
+              rounded-lg
+              bg-surface-muted
+              text-brand
+              text-3xl
+              bg-brand-soft-hover
+              transition
+            "
           >
             ‹
           </button>
@@ -60,7 +60,11 @@ export default function CategoriasCarousel({
             <SwiperSlide key={categoria.id} className="aspect-square">
               <Link
                 href={`/categoria/${categoria.slug}`}
-                className="group relative block h-full w-full overflow-hidden rounded-lg bg-gray-100"
+                className="
+                  group relative block h-full w-full overflow-hidden
+                  rounded-lg
+                  bg-surface-muted
+                "
               >
                 <Image
                   src={
@@ -76,21 +80,22 @@ export default function CategoriasCarousel({
                 {/* overlay */}
                 <div
                   className="
-                            absolute inset-0
-                            bg-gray-900
-                            translate-y-full
-                            transition-transform duration-500 ease-out
-                            group-hover:translate-y-0
-                        "
+                    absolute inset-0
+                    bg-brand
+                    translate-y-full
+                    transition-transform duration-500 ease-out
+                    group-hover:translate-y-0
+                  "
                 />
 
                 <span
                   className="
-                            absolute inset-0 z-10
-                            flex items-center justify-center
-                            text-center
-                            text-[11px] font-medium uppercase tracking-wide text-white
-                        "
+                    absolute inset-0 z-10
+                    flex items-center justify-center
+                    text-center
+                    text-[11px] font-medium uppercase tracking-wide
+                    text-on-brand
+                  "
                 >
                   {categoria.nome}
                 </span>
@@ -103,16 +108,16 @@ export default function CategoriasCarousel({
           <button
             id="next"
             className="
-          aspect-square
-          w-full
-          flex items-center justify-center
-          rounded-lg
-          bg-gray-100
-          text-gray-900
-          text-3xl
-          hover:bg-gray-200
-          transition
-        "
+              aspect-square
+              w-20
+              flex items-center justify-center
+              rounded-lg
+              bg-surface-muted
+              text-brand
+              text-3xl
+              bg-brand-soft-hover
+              transition
+            "
           >
             ›
           </button>

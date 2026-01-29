@@ -1,119 +1,240 @@
+"use client";
+
+import { useEffect, useMemo, useRef, useState } from "react";
+
+type Estado = {
+  id: number;
+  sigla: string;
+  nome: string;
+};
+
+type Cidade = {
+  id: number;
+  nome: string;
+};
+
 export default function ContactForm() {
+  const [estados, setEstados] = useState<Estado[]>([]);
+  const [cidades, setCidades] = useState<Cidade[]>([]);
+  const [estado, setEstado] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [cidadeBusca, setCidadeBusca] = useState("");
+  const [cidadeAberta, setCidadeAberta] = useState(false);
+  const [emailErro, setEmailErro] = useState("");
+
+  const cidadeRef = useRef<HTMLDivElement>(null);
+
+  /* =========================
+     Fetch Estados
+  ========================= */
+  useEffect(() => {
+    fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
+      .then((res) => res.json())
+      .then((data) =>
+        setEstados(
+          data.sort((a: Estado, b: Estado) => a.nome.localeCompare(b.nome))
+        )
+      );
+  }, []);
+
+  /* =========================
+     Fetch Cidades
+  ========================= */
+  useEffect(() => {
+    if (!estado || estado === "FORA") {
+      setCidades([]);
+      setCidade("");
+      return;
+    }
+
+    fetch(
+      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`
+    )
+      .then((res) => res.json())
+      .then(setCidades);
+  }, [estado]);
+
+  /* =========================
+     Fecha dropdown cidade
+  ========================= */
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (cidadeRef.current && !cidadeRef.current.contains(e.target as Node)) {
+        setCidadeAberta(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  /* =========================
+     Filtrar cidades
+  ========================= */
+  const cidadesFiltradas = useMemo(() => {
+    return cidades.filter((c) =>
+      c.nome.toLowerCase().includes(cidadeBusca.toLowerCase())
+    );
+  }, [cidadeBusca, cidades]);
+
+  /* =========================
+     Validação de e-mail
+  ========================= */
+  function validarEmail(valor: string) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmailErro(regex.test(valor) ? "" : "E-mail inválido");
+  }
+
   return (
-    <section className="relative isolate bg-gray-900 px-6 py-24 sm:py-32 lg:px-8">
-      {/* Cabeçalho */}
+    <section className="relative isolate bg-surface-muted px-6 py-24 sm:py-32 lg:px-8">
       <div className="mx-auto max-w-2xl text-center">
-        <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-          Fale com a Biarritz Turismo Sports
+        <h1 className="text-4xl font-semibold tracking-tight text-color-text sm:text-5xl">
+          Fale com a <span className="text-brand">Biarritz Turismo Sports</span>
         </h1>
-        <p className="mt-4 text-lg text-gray-400">
-          Tem dúvidas, quer solicitar um orçamento ou saber mais sobre nossas
-          viagens esportivas? Preencha o formulário abaixo — nosso time responde
-          rapidamente.
+        <p className="mt-4 text-lg text-muted">
+          Preencha o formulário abaixo e nossa equipe entrará em contato.
         </p>
       </div>
 
-      {/* Formulário */}
-      <form
-        action="#"
-        method="POST"
-        className="mx-auto mt-16 max-w-xl sm:mt-20"
-      >
-        <div className="grid grid-cols-1 gap-y-6">
-          {/* Nome */}
+      <form className="mx-auto mt-16 max-w-xl space-y-6">
+        {/* Nome */}
+        <div>
+          <label className="block text-sm font-semibold text-color-text">
+            Nome completo <span className="text-brand">*</span>
+          </label>
+          <input
+            required
+            aria-required="true"
+            className="mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default focus-ring-brand"
+          />
+        </div>
+
+        {/* Email */}
+        <div>
+          <label className="block text-sm font-semibold text-color-text">
+            E-mail <span className="text-brand">*</span>
+          </label>
+          <input
+            type="email"
+            required
+            aria-required="true"
+            onBlur={(e) => validarEmail(e.target.value)}
+            className="mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default focus-ring-brand"
+          />
+          {emailErro && <p className="mt-1 text-sm text-error">{emailErro}</p>}
+        </div>
+
+        {/* Telefone */}
+        <div>
+          <label className="block text-sm font-semibold text-color-text">
+            Telefone <span className="text-muted">(opcional)</span>
+          </label>
+          <input
+            type="tel"
+            placeholder="+55 11 99999-9999"
+            className="mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default focus-ring-brand"
+          />
+        </div>
+
+        {/* Estado + Cidade */}
+        <div className="grid grid-cols-2 gap-x-4">
           <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-semibold text-white"
-            >
-              Nome completo
+            <label className="block text-sm font-semibold text-color-text">
+              Estado
             </label>
-            <div className="mt-2.5">
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                autoComplete="name"
-                placeholder="Seu nome"
-                className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-white outline outline-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:outline-indigo-500"
-              />
-            </div>
+            <select
+              value={estado}
+              onChange={(e) => setEstado(e.target.value)}
+              className="mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default focus-ring-brand"
+            >
+              <option value="">Selecione</option>
+              <option value="FORA">Fora do Brasil</option>
+              {estados.map((e) => (
+                <option key={e.id} value={e.sigla}>
+                  {e.nome}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Email */}
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-semibold text-white"
-            >
-              E-mail
+          <div ref={cidadeRef} className="relative">
+            <label className="block text-sm font-semibold text-color-text">
+              Cidade
             </label>
-            <div className="mt-2.5">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                placeholder="voce@email.com"
-                className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-white outline outline-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:outline-indigo-500"
-              />
-            </div>
-          </div>
 
-          {/* Telefone (opcional) */}
-          <div>
-            <label
-              htmlFor="phone"
-              className="block text-sm font-semibold text-white"
+            <button
+              type="button"
+              disabled={!estado || estado === "FORA"}
+              onClick={() => setCidadeAberta((v) => !v)}
+              className={`
+                mt-2 w-full rounded-md px-3.5 py-2 text-left
+                border border-default bg-surface
+                ${
+                  !estado || estado === "FORA"
+                    ? "opacity-50 cursor-not-allowed"
+                    : "focus-ring-brand"
+                }
+              `}
             >
-              Telefone <span className="text-gray-400">(opcional)</span>
-            </label>
-            <div className="mt-2.5 flex rounded-md bg-white/5 outline outline-1 outline-white/10 focus-within:outline-2 focus-within:outline-indigo-500">
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                placeholder="(11) 99999-9999"
-                className="block w-full bg-transparent px-3 py-2 text-white placeholder:text-gray-500 focus:outline-none"
-              />
-            </div>
-          </div>
+              {cidade || "Selecione a cidade"}
+            </button>
 
-          {/* Mensagem */}
-          <div>
-            <label
-              htmlFor="message"
-              className="block text-sm font-semibold text-white"
-            >
-              Mensagem
-            </label>
-            <div className="mt-2.5">
-              <textarea
-                id="message"
-                name="message"
-                rows={4}
-                required
-                placeholder="Conte pra gente como podemos ajudar…"
-                className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-white outline outline-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:outline-indigo-500"
-              />
-            </div>
+            {cidadeAberta && (
+              <div className="absolute z-10 mt-1 w-full rounded-md bg-surface border border-default shadow">
+                <input
+                  placeholder="Buscar cidade..."
+                  value={cidadeBusca}
+                  onChange={(e) => setCidadeBusca(e.target.value)}
+                  className="w-full px-3 py-2 border-b border-default focus:outline-none"
+                />
+
+                <ul className="max-h-56 overflow-y-auto">
+                  {cidadesFiltradas.map((c) => (
+                    <li
+                      key={c.id}
+                      onClick={() => {
+                        setCidade(c.nome);
+                        setCidadeAberta(false);
+                        setCidadeBusca("");
+                      }}
+                      className="px-3 py-2 cursor-pointer hover:bg-surface-muted"
+                    >
+                      {c.nome}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
+        </div>
+
+        {/* Mensagem */}
+        <div>
+          <label className="block text-sm font-semibold text-color-text">
+            Mensagem <span className="text-brand">*</span>
+          </label>
+          <textarea
+            rows={4}
+            required
+            aria-required="true"
+            className="mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default focus-ring-brand"
+          />
         </div>
 
         {/* Botão */}
-        <div className="mt-10">
-          <button
-            type="submit"
-            className="w-full rounded-md bg-indigo-500 px-4 py-3 text-sm font-semibold text-white shadow hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-          >
-            Enviar mensagem
-          </button>
-          <p className="mt-3 text-center text-xs text-gray-500">
-            Normalmente respondemos em até 1 dia útil.
-          </p>
-        </div>
+        <button
+          type="submit"
+          disabled={!!emailErro}
+          className={`
+            w-full rounded-md px-4 py-3 text-sm font-semibold
+            ${
+              emailErro
+                ? "bg-brand-soft text-muted cursor-not-allowed"
+                : "bg-brand text-on-brand bg-brand-dark-hover focus-ring-brand"
+            }
+          `}
+        >
+          Enviar mensagem
+        </button>
       </form>
     </section>
   );

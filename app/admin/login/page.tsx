@@ -46,51 +46,65 @@ export default function AdminLoginPage() {
     router.push(res.url ?? "/admin");
   }
 
-  // ⏳ Enquanto verifica sessão
-  if (status === "loading") {
-    return null;
-  }
+  if (status === "loading") return null;
 
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div className="flex min-h-full flex-col justify-center bg-surface px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-white">
+        <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-color-text">
           Login Administração
         </h2>
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form
+          className="space-y-6 rounded-lg border border-default bg-surface p-6 shadow-sm"
+          onSubmit={handleSubmit}
+        >
           {/* Erro */}
           {error && (
-            <div className="rounded-md bg-red-500/10 p-3 text-sm text-red-400">
+            <div className="rounded-md bg-red-500/10 p-3 text-sm text-red-500">
               {error}
             </div>
           )}
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-100">
+            <label className="block text-sm font-medium text-color-text">
               Email
             </label>
             <input
               name="email"
               type="email"
               required
-              className="mt-2 block w-full rounded-md bg-white/5 px-3 py-1.5 text-white outline outline-1 outline-white/10 focus:outline-2 focus:outline-indigo-500"
+              className="
+                mt-2 block w-full rounded-md
+                bg-surface-muted
+                px-3 py-2
+                text-color-text
+                outline outline-1 outline-border
+                focus-ring-brand
+              "
             />
           </div>
 
           {/* Senha */}
           <div>
-            <label className="block text-sm font-medium text-gray-100">
+            <label className="block text-sm font-medium text-color-text">
               Senha
             </label>
             <input
               name="password"
               type="password"
               required
-              className="mt-2 block w-full rounded-md bg-white/5 px-3 py-1.5 text-white outline outline-1 outline-white/10 focus:outline-2 focus:outline-indigo-500"
+              className="
+                mt-2 block w-full rounded-md
+                bg-surface-muted
+                px-3 py-2
+                text-color-text
+                outline outline-1 outline-border
+                focus-ring-brand
+              "
             />
           </div>
 
@@ -98,7 +112,16 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-400 disabled:opacity-50"
+            className="
+              flex w-full justify-center rounded-md
+              bg-brand
+              px-3 py-2
+              text-sm font-semibold
+              text-on-brand
+              bg-brand-dark-hover
+              disabled:opacity-50
+              focus-ring-brand
+            "
           >
             {loading ? "Entrando..." : "Log in"}
           </button>
