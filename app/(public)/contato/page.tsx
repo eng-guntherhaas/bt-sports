@@ -22,6 +22,9 @@ export default function ContactForm() {
   const [cidadeAberta, setCidadeAberta] = useState(false);
   const [emailErro, setEmailErro] = useState("");
 
+  const [loading, setLoading] = useState(false);
+  const [sucesso, setSucesso] = useState(false);
+
   const cidadeRef = useRef<HTMLDivElement>(null);
 
   /* =========================
@@ -38,14 +41,10 @@ export default function ContactForm() {
   }, []);
 
   /* =========================
-     Fetch Cidades
+     Fetch Cidades (efeito externo)
   ========================= */
   useEffect(() => {
-    if (!estado || estado === "FORA") {
-      setCidades([]);
-      setCidade("");
-      return;
-    }
+    if (!estado || estado === "FORA") return;
 
     fetch(
       `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`
@@ -84,6 +83,46 @@ export default function ContactForm() {
     setEmailErro(regex.test(valor) ? "" : "E-mail inválido");
   }
 
+  /* =========================
+     Handle Submit
+  ========================= */
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (emailErro) return;
+
+    setLoading(true);
+    setSucesso(false);
+
+    const formData = new FormData(e.currentTarget);
+
+    const data = {
+      nome: formData.get("nome"),
+      email: formData.get("email"),
+      telefone: formData.get("telefone"),
+      estado,
+      cidade,
+      mensagem: formData.get("mensagem"),
+    };
+
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    setLoading(false);
+
+    if (res.ok) {
+      setSucesso(true);
+      e.currentTarget.reset();
+      setEstado("");
+      setCidade("");
+      setCidades([]);
+      setCidadeBusca("");
+      setCidadeAberta(false);
+    }
+  }
+
   return (
     <section className="relative isolate bg-surface-muted px-6 py-24 sm:py-32 lg:px-8">
       <div className="mx-auto max-w-2xl text-center">
@@ -95,15 +134,18 @@ export default function ContactForm() {
         </p>
       </div>
 
-      <form className="mx-auto mt-16 max-w-xl space-y-6">
+      <form
+        onSubmit={handleSubmit}
+        className="mx-auto mt-16 max-w-xl space-y-6"
+      >
         {/* Nome */}
         <div>
           <label className="block text-sm font-semibold text-color-text">
             Nome completo <span className="text-brand">*</span>
           </label>
           <input
+            name="nome"
             required
-            aria-required="true"
             className="mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default focus-ring-brand"
           />
         </div>
@@ -114,9 +156,9 @@ export default function ContactForm() {
             E-mail <span className="text-brand">*</span>
           </label>
           <input
+            name="email"
             type="email"
             required
-            aria-required="true"
             onBlur={(e) => validarEmail(e.target.value)}
             className="mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default focus-ring-brand"
           />
@@ -129,6 +171,7 @@ export default function ContactForm() {
             Telefone <span className="text-muted">(opcional)</span>
           </label>
           <input
+            name="telefone"
             type="tel"
             placeholder="+55 11 99999-9999"
             className="mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default focus-ring-brand"
@@ -143,7 +186,17 @@ export default function ContactForm() {
             </label>
             <select
               value={estado}
-              onChange={(e) => setEstado(e.target.value)}
+              onChange={(e) => {
+                const novoEstado = e.target.value;
+                setEstado(novoEstado);
+
+                if (!novoEstado || novoEstado === "FORA") {
+                  setCidades([]);
+                  setCidade("");
+                  setCidadeBusca("");
+                  setCidadeAberta(false);
+                }
+              }}
               className="mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default focus-ring-brand"
             >
               <option value="">Selecione</option>
@@ -213,17 +266,24 @@ export default function ContactForm() {
             Mensagem <span className="text-brand">*</span>
           </label>
           <textarea
+            name="mensagem"
             rows={4}
             required
-            aria-required="true"
             className="mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default focus-ring-brand"
           />
         </div>
 
+        {/* Feedback */}
+        {sucesso && (
+          <p className="text-center text-sm text-green-600">
+            Mensagem enviada com sucesso!
+          </p>
+        )}
+
         {/* Botão */}
         <button
           type="submit"
-          disabled={!!emailErro}
+          disabled={loading || !!emailErro}
           className={`
             w-full rounded-md px-4 py-3 text-sm font-semibold
             ${
@@ -233,7 +293,7 @@ export default function ContactForm() {
             }
           `}
         >
-          Enviar mensagem
+          {loading ? "Enviando..." : "Enviar mensagem"}
         </button>
       </form>
     </section>

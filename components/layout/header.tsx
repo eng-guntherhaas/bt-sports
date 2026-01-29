@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import HeaderPublic from "./header-public";
-import HeaderAdmin from "./admin/header-admin";
+import HeaderAdmin from "./header-admin";
 
 export default function Header() {
   const { data: session, status } = useSession();

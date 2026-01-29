@@ -26,21 +26,23 @@ export default function CategoriasCarousel({
 
   return (
     <div className="mx-auto max-w-7xl">
-      <div className="grid grid-cols-7 gap-4 items-center">
+      <div className="grid grid-cols-[auto_1fr_auto] grid-flow-col gap-4 items-center">
         {hasNavigation && (
           <button
             id="prev"
             className="
-              aspect-square
-              w-20
-              flex items-center justify-center
-              rounded-lg
-              bg-surface-muted
-              text-brand
-              text-3xl
-              bg-brand-soft-hover
-              transition
-            "
+                        aspect-square
+                        w-20
+                        flex items-center justify-center
+                        rounded-lg
+                        bg-surface-muted
+                        border border-transparent
+                        text-brand
+                        text-3xl
+                        leading-none
+                        border-brand-hover
+                        transition
+                      "
           >
             ‹
           </button>
@@ -108,16 +110,18 @@ export default function CategoriasCarousel({
           <button
             id="next"
             className="
-              aspect-square
-              w-20
-              flex items-center justify-center
-              rounded-lg
-              bg-surface-muted
-              text-brand
-              text-3xl
-              bg-brand-soft-hover
-              transition
-            "
+                      aspect-square
+                      w-20
+                      flex items-center justify-center
+                      rounded-lg
+                      bg-surface-muted
+                      border border-transparent
+                      text-brand
+                      text-3xl
+                      leading-none
+                      border-brand-hover
+                      transition
+                    "
           >
             ›
           </button>
