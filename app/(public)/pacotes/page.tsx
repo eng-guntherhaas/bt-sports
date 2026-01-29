@@ -89,27 +89,23 @@ export default async function PacotesPublicos({
     };
   });
 
-  /* ---------- unificar + ordenar ---------- */
-
   const pacotesOrdenados = sortPacotes(
     [...mockPacotes, ...pacotesReais],
     order
   );
 
-  /* ---------------- render ---------------- */
-
   return (
-    <div className="min-h-screen bg-background px-6 py-12">
+    <div className="min-h-screen bg-background px-4 sm:px-6 py-10 sm:py-12">
       {/* Header */}
-      <div className="mb-10 text-center">
-        <h1 className="text-3xl font-bold text-foreground">
+      <div className="mb-8 sm:mb-10 text-center">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
           Pacotes de Viagem
         </h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="mt-2 text-sm sm:text-base text-muted-foreground">
           Experiências esportivas completas, do começo ao fim.
         </p>
 
-        <div className="mt-6 flex justify-center gap-3">
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
           <a
             href="/pacotes?order=nome"
             className={`rounded-md px-4 py-2 text-sm font-medium ${
@@ -138,7 +134,8 @@ export default async function PacotesPublicos({
       <div
         className="
           grid gap-6
-          grid-cols-[repeat(auto-fill,minmax(260px,1fr))]
+          grid-cols-1
+          sm:grid-cols-[repeat(auto-fill,minmax(260px,1fr))]
         "
       >
         {pacotesOrdenados.map((p) => (

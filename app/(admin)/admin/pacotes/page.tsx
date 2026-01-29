@@ -39,12 +39,14 @@ export default async function AdminPacotes({
   ];
 
   return (
-    <div className="bg-admin min-h-screen px-6 py-10">
+    <div className="bg-admin min-h-screen px-4 sm:px-6 py-8 sm:py-10">
       {/* Header */}
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-admin">Pacotes de Viagem</h1>
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-xl sm:text-2xl font-bold text-admin">
+          Pacotes de Viagem
+        </h1>
 
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <Link
             href="/admin/pacotes?order=nome"
             className={`rounded-md px-4 py-2 text-sm font-medium ${
@@ -73,44 +75,45 @@ export default async function AdminPacotes({
       <div
         className="
           grid gap-6
-          grid-cols-[repeat(auto-fill,minmax(260px,1fr))]
+          grid-cols-1
+          sm:grid-cols-[repeat(auto-fill,minmax(260px,1fr))]
         "
       >
         {/* Novo pacote */}
         <Link
           href="/admin/pacotes/novo"
           className="
-    group relative
-    aspect-[4/3]
-    overflow-hidden
-    rounded-xl
-    border-2 border-dashed border-border-muted
-    bg-surface
-    transition
-    hover:-translate-y-0.5
-    hover:shadow-lg
-  "
+            group relative
+            aspect-[4/3]
+            overflow-hidden
+            rounded-xl
+            border-2 border-dashed border-border-muted
+            bg-surface
+            transition
+            sm:hover:-translate-y-0.5
+            sm:hover:shadow-lg
+          "
         >
-          {/* Overlay igual aos cards */}
+          {/* Overlay */}
           <div
             className="
-      pointer-events-none
-      absolute inset-0
-      bg-brand-soft/60
-      opacity-0
-      transition-opacity
-      group-hover:opacity-100
-    "
+              pointer-events-none
+              absolute inset-0
+              bg-brand-soft/60
+              opacity-0
+              transition-opacity
+              sm:group-hover:opacity-100
+            "
           />
 
           <div className="relative z-10 flex h-full items-center justify-center">
             <span
               className="
-        text-5xl font-light
-        text-admin-muted
-        transition
-        group-hover:text-brand
-      "
+                text-5xl font-light
+                text-admin-muted
+                transition
+                sm:group-hover:text-brand
+              "
             >
               +
             </span>
@@ -119,15 +122,14 @@ export default async function AdminPacotes({
 
         {/* Mocks */}
         {mockPacotes.map((p) => (
-          // eslint-disable-next-line react/jsx-key
           <PacoteCard
-            nome="Maratona de Paris 2025"
-            resumo="Pacote completo com inscrição, hotel e transfers."
-            preco={12990}
-            dataEvento="Abril 2025"
-            imageUrl="https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf"
-            href="/pacotes/maratona-paris-2025"
+            key={p.id}
+            nome={p.nome}
+            resumo={p.resumo}
+            preco={p.preco}
+            imageUrl={p.imageUrl}
             badge="mock"
+            variant="admin"
           />
         ))}
 

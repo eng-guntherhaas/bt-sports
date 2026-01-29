@@ -47,9 +47,12 @@ export default function HeaderPublic() {
       <Dialog
         open={mobileMenuOpen}
         onClose={setMobileMenuOpen}
-        className="lg:hidden"
+        className="lg:hidden fixed inset-0 z-50"
       >
-        <DialogPanel className="fixed inset-y-0 right-0 w-full bg-surface p-6 sm:max-w-sm">
+        {/* backdrop */}
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+
+        <DialogPanel className="fixed inset-y-0 right-0 w-full sm:max-w-sm bg-surface p-6">
           <button
             onClick={() => setMobileMenuOpen(false)}
             className="text-muted text-brand-hover"
@@ -61,18 +64,21 @@ export default function HeaderPublic() {
             <Link
               href="/sobre"
               className="block font-medium text-muted text-brand-hover"
+              onClick={() => setMobileMenuOpen(false)}
             >
               Sobre nós
             </Link>
             <Link
               href="/pacotes"
               className="block font-medium text-muted text-brand-hover"
+              onClick={() => setMobileMenuOpen(false)}
             >
               Pacotes
             </Link>
             <Link
               href="/contato"
               className="block font-medium text-muted text-brand-hover"
+              onClick={() => setMobileMenuOpen(false)}
             >
               Contato
             </Link>

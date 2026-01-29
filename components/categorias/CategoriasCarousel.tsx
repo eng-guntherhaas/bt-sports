@@ -9,7 +9,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 type Categoria = {
-  image: unknown;
+  image: any;
   id: string;
   nome: string;
   slug: string;
@@ -20,46 +20,63 @@ export default function CategoriasCarousel({
 }: {
   categorias: Categoria[];
 }) {
-  const maxSlides = 5;
-  const slidesVisiveis = Math.min(categorias.length, maxSlides);
-  const hasNavigation = categorias.length > maxSlides;
+  const hasNavigation = categorias.length > 5;
 
   return (
-    <div className="mx-auto max-w-7xl">
-      <div className="grid grid-cols-[auto_1fr_auto] grid-flow-col gap-4 items-center">
+    <div className="mx-auto max-w-7xl px-4">
+      <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr_auto] gap-4 items-center">
+        {/* PREV (desktop only) */}
         {hasNavigation && (
           <button
             id="prev"
             className="
-                        aspect-square
-                        w-20
-                        flex items-center justify-center
-                        rounded-lg
-                        bg-surface-muted
-                        border border-transparent
-                        text-brand
-                        text-3xl
-                        leading-none
-                        border-brand-hover
-                        transition
-                      "
+              hidden lg:flex
+              aspect-square w-20
+              items-center justify-center
+              rounded-lg
+              bg-surface-muted
+              border border-transparent
+              text-brand text-3xl
+              border-brand-hover
+              transition
+            "
           >
             ‹
           </button>
         )}
 
+        {/* SWIPER */}
         <Swiper
           modules={hasNavigation ? [Navigation] : []}
           navigation={
             hasNavigation ? { prevEl: "#prev", nextEl: "#next" } : false
           }
-          spaceBetween={50}
-          slidesPerView={slidesVisiveis}
-          slidesPerGroup={slidesVisiveis}
-          className={`w-full ${hasNavigation ? "col-span-5" : "col-span-7"}`}
+          spaceBetween={16}
+          breakpoints={{
+            0: {
+              slidesPerView: 1.05,
+              slidesPerGroup: 1,
+            },
+            640: {
+              slidesPerView: 2.2,
+              slidesPerGroup: 2,
+            },
+            1024: {
+              slidesPerView: 4,
+              slidesPerGroup: 4,
+            },
+            1280: {
+              slidesPerView: 5,
+              slidesPerGroup: 5,
+            },
+          }}
+          className="w-full"
         >
           {categorias.map((categoria) => (
-            <SwiperSlide key={categoria.id} className="aspect-square">
+            <SwiperSlide
+              key={categoria.id}
+              className="aspect-[4/3] sm:aspect-square max-h-[260px] sm:max-h-none"
+            >
               <Link
                 href={`/categoria/${categoria.slug}`}
                 className="
@@ -106,22 +123,21 @@ export default function CategoriasCarousel({
           ))}
         </Swiper>
 
+        {/* NEXT (desktop only) */}
         {hasNavigation && (
           <button
             id="next"
             className="
-                      aspect-square
-                      w-20
-                      flex items-center justify-center
-                      rounded-lg
-                      bg-surface-muted
-                      border border-transparent
-                      text-brand
-                      text-3xl
-                      leading-none
-                      border-brand-hover
-                      transition
-                    "
+              hidden lg:flex
+              aspect-square w-20
+              items-center justify-center
+              rounded-lg
+              bg-surface-muted
+              border border-transparent
+              text-brand text-3xl
+              border-brand-hover
+              transition
+            "
           >
             ›
           </button>

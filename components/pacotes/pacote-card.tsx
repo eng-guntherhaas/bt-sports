@@ -34,8 +34,8 @@ export default function PacoteCard({
         border border-default
         bg-surface
         transition
-        hover:-translate-y-0.5
-        hover:shadow-lg
+        sm:hover:-translate-y-0.5
+        sm:hover:shadow-lg
       "
     >
       {/* IMAGEM */}
@@ -48,7 +48,7 @@ export default function PacoteCard({
           </div>
         )}
 
-        {/* Overlay brand-soft */}
+        {/* Overlay brand-soft (desktop hover) */}
         <div
           className="
             pointer-events-none
@@ -56,7 +56,7 @@ export default function PacoteCard({
             bg-brand-soft/60
             opacity-0
             transition-opacity
-            group-hover:opacity-100
+            sm:group-hover:opacity-100
           "
         />
 
@@ -77,13 +77,13 @@ export default function PacoteCard({
         )}
       </div>
 
-      {/* CONTEÚDO (SEM OVERLAY) */}
-      <div className="relative z-10 bg-surface px-4 py-4">
+      {/* CONTEÚDO */}
+      <div className="relative z-10 bg-surface px-4 py-4 sm:px-5">
         {dataEvento && (
           <span className="text-xs font-medium text-muted">{dataEvento}</span>
         )}
 
-        <h3 className="mt-1 text-base font-semibold text-color-text leading-snug">
+        <h3 className="mt-1 text-base sm:text-lg font-semibold text-color-text leading-snug">
           {nome}
         </h3>
 
@@ -92,7 +92,7 @@ export default function PacoteCard({
         )}
 
         {preco && (
-          <div className="mt-3 text-lg font-bold text-brand">
+          <div className="mt-3 text-base sm:text-lg font-bold text-brand">
             R$ {preco.toLocaleString("pt-BR")}
           </div>
         )}

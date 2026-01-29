@@ -82,21 +82,28 @@ export default function HeaderAdmin() {
           </div>
         </PopoverGroup>
       </nav>
-
       {/* 📱 Mobile menu */}
       <Dialog
         open={mobileMenuOpen}
         onClose={setMobileMenuOpen}
-        className="lg:hidden"
+        className="lg:hidden fixed inset-0 z-50"
       >
-        <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full bg-admin p-6 sm:max-w-sm">
+        {/* Backdrop */}
+        <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
+
+        <DialogPanel className="fixed inset-y-0 right-0 w-full sm:max-w-sm bg-admin p-6">
           <div className="flex items-center justify-between">
-            <Link href="/" className="font-bold text-admin">
+            <Link
+              href="/"
+              className="font-bold text-admin"
+              onClick={() => setMobileMenuOpen(false)}
+            >
               Biarritz Turismo Sports
               <span className="ml-2 text-xs font-medium text-admin-muted">
                 admin
               </span>
             </Link>
+
             <button
               onClick={() => setMobileMenuOpen(false)}
               className="text-admin-muted text-admin-hover"
@@ -112,13 +119,25 @@ export default function HeaderAdmin() {
                 Site
               </p>
               <div className="mt-2 space-y-2">
-                <Link href="/sobre" className="block text-admin-hover">
+                <Link
+                  href="/sobre"
+                  className="block text-admin-hover"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
                   Sobre nós
                 </Link>
-                <Link href="/pacotes" className="block text-admin-hover">
+                <Link
+                  href="/admin/pacotes"
+                  className="block text-admin-hover"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
                   Pacotes
                 </Link>
-                <Link href="/contato" className="block text-admin-hover">
+                <Link
+                  href="/contato"
+                  className="block text-admin-hover"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
                   Contato
                 </Link>
               </div>
@@ -130,10 +149,18 @@ export default function HeaderAdmin() {
                 Administração
               </p>
               <div className="mt-2 space-y-2">
-                <Link href="/admin" className="block text-admin-hover">
+                <Link
+                  href="/admin"
+                  className="block text-admin-hover"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
                   Dashboard
                 </Link>
-                <Link href="/admin/users" className="block text-admin-hover">
+                <Link
+                  href="/admin/users"
+                  className="block text-admin-hover"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
                   Usuários
                 </Link>
                 <button
@@ -142,7 +169,7 @@ export default function HeaderAdmin() {
                       callbackUrl: "/admin/login",
                     })
                   }
-                  className="block text-left text-danger text-danger-hover"
+                  className="block w-full text-left text-danger text-danger-hover"
                 >
                   Logout
                 </button>

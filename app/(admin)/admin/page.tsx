@@ -10,12 +10,6 @@ export default async function AdminDashboard() {
 
       {/* Cards */}
       <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {/* Usuários */}
-        <div className="rounded-lg border border-default bg-surface p-6">
-          <p className="text-sm text-muted">Usuários</p>
-          <p className="mt-2 text-3xl font-bold text-brand">{totalUsers}</p>
-        </div>
-
         {/* Status */}
         <div className="rounded-lg border border-default bg-surface p-6">
           <p className="text-sm text-muted">Status</p>
