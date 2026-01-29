@@ -11,7 +11,6 @@ export default function AdminLoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // 🔁 Se já estiver logado, manda pro admin
   useEffect(() => {
     if (status === "authenticated" && session.user.role === "admin") {
       router.replace("/admin");
@@ -35,11 +34,11 @@ export default function AdminLoginPage() {
     setLoading(false);
 
     if (!res?.ok) {
-      if (res?.error === "CredentialsSignin") {
-        setError("Email ou senha inválidos");
-      } else {
-        setError("Erro ao tentar fazer login");
-      }
+      setError(
+        res?.error === "CredentialsSignin"
+          ? "Email ou senha inválidos"
+          : "Erro ao tentar fazer login"
+      );
       return;
     }
 
@@ -49,21 +48,28 @@ export default function AdminLoginPage() {
   if (status === "loading") return null;
 
   return (
-    <div className="flex min-h-full flex-col justify-center bg-surface px-6 py-12 lg:px-8">
+    <div className="flex min-h-screen flex-col justify-center bg-surface px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-color-text">
+        <h2 className="text-center text-2xl font-bold tracking-tight text-color-text">
           Login Administração
         </h2>
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form
-          className="space-y-6 rounded-lg border border-default bg-surface p-6 shadow-sm"
           onSubmit={handleSubmit}
+          className="
+            space-y-6
+            rounded-lg
+            border border-muted
+            bg-surface
+            p-6
+            shadow-sm
+          "
         >
           {/* Erro */}
           {error && (
-            <div className="rounded-md bg-red-500/10 p-3 text-sm text-red-500">
+            <div className="rounded-md bg-error/10 px-4 py-3 text-sm text-error">
               {error}
             </div>
           )}
@@ -82,8 +88,10 @@ export default function AdminLoginPage() {
                 bg-surface-muted
                 px-3 py-2
                 text-color-text
-                outline outline-1 outline-border
+                border border-muted
+                focus:border-brand
                 focus-ring-brand
+                transition
               "
             />
           </div>
@@ -102,8 +110,10 @@ export default function AdminLoginPage() {
                 bg-surface-muted
                 px-3 py-2
                 text-color-text
-                outline outline-1 outline-border
+                border border-muted
+                focus:border-brand
                 focus-ring-brand
+                transition
               "
             />
           </div>
@@ -118,12 +128,13 @@ export default function AdminLoginPage() {
               px-3 py-2
               text-sm font-semibold
               text-on-brand
-              bg-brand-dark-hover
+              transition-colors
+              hover:bg-brand-dark
               disabled:opacity-50
               focus-ring-brand
             "
           >
-            {loading ? "Entrando..." : "Log in"}
+            {loading ? "Entrando..." : "Entrar"}
           </button>
         </form>
       </div>

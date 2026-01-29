@@ -1,8 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
 export default async function AdminDashboard() {
-  const totalUsers = await prisma.user.count();
-
   return (
     <div className="bg-surface p-8">
       {/* Título */}

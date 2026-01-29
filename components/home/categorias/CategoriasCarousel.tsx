@@ -8,11 +8,14 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-type Categoria = {
-  image: any;
-  id: string;
+export type Categoria = {
+  id: number;
   nome: string;
   slug: string;
+  image: string | null;
+  _count: {
+    pacotes: number;
+  };
 };
 
 export default function CategoriasCarousel({
