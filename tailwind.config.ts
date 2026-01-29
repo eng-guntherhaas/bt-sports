@@ -1,7 +1,9 @@
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
 
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}"],
+
   theme: {
     extend: {
       colors: {
@@ -16,9 +18,39 @@ const config: Config = {
         text: "rgb(var(--color-text) / <alpha-value>)",
         muted: "rgb(var(--color-muted) / <alpha-value>)",
       },
+
+      typography: {
+        DEFAULT: {
+          css: {
+            color: "rgb(var(--color-text) / 1)",
+
+            h2: {
+              color: "rgb(var(--color-text) / 1)",
+            },
+
+            strong: {
+              color: "rgb(var(--color-text) / 1)",
+              fontWeight: "600",
+            },
+
+            a: {
+              color: "rgb(var(--color-brand) / 1)",
+              textDecoration: "none",
+              "&:hover": {
+                textDecoration: "underline",
+              },
+            },
+
+            ul: {
+              paddingLeft: "1.25rem",
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [],
+
+  plugins: [typography],
 };
 
 export default config;

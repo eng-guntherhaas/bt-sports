@@ -96,11 +96,22 @@ function StickyActions({
           onClick={onCancel}
           disabled={loading}
           className="
-            rounded-md border border-default
-            px-6 py-2 text-sm font-semibold
-            text-admin hover-surface
-            disabled:opacity-50
-          "
+rounded-md border border-default
+px-6 py-2 text-sm font-semibold
+text-admin
+
+transition-all duration-150
+cursor-pointer
+
+hover:bg-brand/5
+hover:text-brand
+hover:border-brand/50
+hover:ring-1 hover:ring-brand/30
+
+focus-ring-brand
+disabled:opacity-50
+disabled:pointer-events-none
+"
         >
           Cancelar
         </button>
