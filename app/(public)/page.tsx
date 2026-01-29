@@ -1,5 +1,5 @@
 import { getCategoriasHome } from "@/lib/getCategoriasHome";
-import CategoriasCarousel from "@/components/CategoriasCarousel";
+import CategoriasCarousel from "@/components/categorias/CategoriasCarousel";
 
 export default async function Home() {
   const categorias = await getCategoriasHome();

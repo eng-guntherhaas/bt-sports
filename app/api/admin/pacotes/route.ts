@@ -1,6 +1,6 @@
+import { pacoteSchema } from "@/app/(admin)/admin/pacotes/novo/schema";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { pacoteSchema } from "@/app/admin/pacotes/novo/schema";
 
 export async function POST(req: Request) {
   try {

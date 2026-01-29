@@ -33,7 +33,7 @@ export default function HeaderAdmin() {
           {/* 🌍 Área pública */}
           <div className="flex gap-x-6">
             <Link
-              href="/admin/sobre"
+              href="/sobre"
               className="text-sm font-semibold text-admin-muted text-admin-hover"
             >
               Sobre nós
