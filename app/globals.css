@@ -9,6 +9,7 @@ Base Design Tokens
     --color-bg: #f8fafc;
     --color-surface: #ffffff;
     --color-surface-muted: #f1f5f9;
+    --color-surface-soft: #f5f7fa;
 
     /* ================= Brand ================= */
     --color-brand: #6ac485;
@@ -46,6 +47,10 @@ Utilities (Design System)
   /* ================= Backgrounds ================= */
   .bg-surface {
     background-color: var(--color-surface);
+  }
+
+  .bg-surface-soft {
+    background-color: var(--color-surface-soft);
   }
 
   .bg-surface-muted {
@@ -88,6 +93,10 @@ Utilities (Design System)
   /* ================= Text ================= */
   .text-brand {
     color: var(--color-brand);
+  }
+
+  .text-brand-dark {
+    color: var(--color-brand-dark);
   }
 
   .text-muted {
