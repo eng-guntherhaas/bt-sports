@@ -124,6 +124,10 @@ Utilities (Design System)
     color: var(--color-text);
   }
 
+  .text-surface-hover:hover {
+    color: var(--color-text-on-brand);
+  }
+
   /* ================= Borders ================= */
   .border-default {
     border-color: var(--color-border);
@@ -172,6 +176,20 @@ Utilities (Design System)
 
   .hover-brand-soft:hover {
     background-color: var(--color-brand-soft);
+  }
+
+  /* ================= Details / Disclosure ================= */
+  .details-trigger {
+    list-style: none;
+  }
+
+  .details-trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  details[open] > .details-trigger {
+    background-color: var(--color-brand-dark);
+    color: var(--color-text-on-brand);
   }
 }
 

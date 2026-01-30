@@ -1,89 +1,138 @@
 generator client {
-  provider        = "prisma-client-js"
-  output          = "../generated/prisma"
-  previewFeatures = []
-  engineType      = "client"
+  provider   = "prisma-client-js"
+  output     = "../generated/prisma"
+  engineType = "client"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-model Contato {
-  id         Int       @id @default(autoincrement())
-  nome       String    @db.VarChar(255)
-  email      String?   @db.VarChar(255)
-  telefone   String?   @db.VarChar(50)
-  cidade     String?   @db.VarChar(100)
-  estado     String?   @db.VarChar(2)
-  mensagem   String
-  created_at DateTime? @default(now()) @db.Timestamp(6)
+enum StatusPacote {
+  RASCUNHO
+  PUBLICADO
+  ESGOTADO
+  CANCELADO
+}
 
+enum TipoFoto {
+  CAPA
+  GALERIA
+  DESTAQUE
+  BANNER
+}
+
+model Contato {
+  id         Int      @id @default(autoincrement())
+  nome       String   @db.VarChar(255)
+  email      String?  @db.VarChar(255)
+  telefone   String?  @db.VarChar(50)
+  cidade     String?  @db.VarChar(100)
+  estado     String?  @db.Char(2)
+  mensagem   String
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+  @@index([created_at])
+  @@index([email])
   @@map("contatos")
 }
 
 model CategoriaViagem {
-  id         Int       @id @default(autoincrement())
-  nome       String    @unique @db.VarChar(100)
-  slug       String    @unique @db.VarChar(100)
-  created_at DateTime? @default(now()) @db.Timestamp(6)
-  pacotes    Pacote[]
+  id         Int      @id @default(autoincrement())
+  nome       String   @unique @db.VarChar(100)
+  slug       String   @unique @db.VarChar(100)
+
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @updatedAt @db.Timestamp(6)
+
+  pacotes Pacote[]
 
   @@map("categorias_viagem")
 }
 
 model Pacote {
-  id                Int              @id @default(autoincrement())
-  nome              String           @db.VarChar(255)
-  data_inicio       DateTime?        @db.Date
-  preco             Decimal?         @db.Decimal(10, 2)
-  texto_destaque    String?
-  resumo            String?
-  descricao         String?
-  created_at        DateTime?        @default(now()) @db.Timestamp(6)
-  updated_at        DateTime?        @default(now()) @updatedAt @db.Timestamp(6)
-  categoria_id      Int?
-  depoimentos       Depoimento[]
-  fotos             Foto[]
-  categorias_viagem CategoriaViagem? @relation(fields: [categoria_id], references: [id], onUpdate: NoAction, map: "pacotes_categoria_fk")
+  id             Int      @id @default(autoincrement())
+  nome           String   @db.VarChar(255)
+  slug           String   @unique @db.VarChar(255)
 
+  data_inicio    DateTime? @db.Date
+  preco          Decimal?  @db.Decimal(10, 2)
+
+  texto_destaque String?
+  resumo         String?
+  descricao      String?
+
+  status         StatusPacote @default(RASCUNHO)
+  destaque       Boolean      @default(false)
+
+  categoria_id   Int
+
+  created_at     DateTime @default(now()) @db.Timestamp(6)
+  updated_at     DateTime @updatedAt @db.Timestamp(6)
+  deleted_at     DateTime?
+
+  categoria CategoriaViagem @relation(fields: [categoria_id], references: [id], onDelete: Restrict)
+
+  fotos        Foto[]
+  depoimentos Depoimento[]
+
+  @@index([categoria_id])
+  @@index([status])
+  @@index([destaque])
+  @@index([data_inicio])
   @@map("pacotes")
 }
 
 model Foto {
-  id         Int       @id @default(autoincrement())
-  pacote_id  Int?
+  id         Int      @id @default(autoincrement())
+  pacote_id  Int
   url        String
   descricao  String?
-  ordem      Int?      @default(0)
-  created_at DateTime? @default(now()) @db.Timestamp(6)
-  tipo       String?   @db.VarChar(30)
-  pacotes    Pacote?   @relation(fields: [pacote_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  ordem      Int      @default(0)
+  tipo       TipoFoto @default(GALERIA)
 
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @updatedAt @db.Timestamp(6)
+
+  pacote Pacote @relation(fields: [pacote_id], references: [id], onDelete: Cascade)
+
+  @@index([pacote_id])
+  @@index([pacote_id, tipo])
+  @@index([pacote_id, ordem])
   @@map("fotos")
 }
 
 model Depoimento {
-  id         Int       @id @default(autoincrement())
-  nome       String    @db.VarChar(255)
-  pacote_id  Int?
-  data       DateTime? @db.Date
+  id         Int      @id @default(autoincrement())
+  nome       String   @db.VarChar(255)
   texto      String
-  created_at DateTime? @default(now()) @db.Timestamp(6)
-  pacotes    Pacote?   @relation(fields: [pacote_id], references: [id], onUpdate: NoAction)
+  data       DateTime? @db.Date
 
+  pacote_id  Int
+
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @updatedAt @db.Timestamp(6)
+
+  pacote Pacote @relation(fields: [pacote_id], references: [id], onDelete: Cascade)
+
+  @@index([pacote_id])
+  @@index([data])
+  @@unique([pacote_id, nome])
   @@map("depoimentos")
 }
 
 model User {
-  id         String    @id @default(cuid())
+   id String @id @default(cuid())
   name       String?
-  email      String    @unique
+  email      String   @unique
   password   String
-  role       String?   @default("admin")
-  created_at DateTime? @default(now()) @db.Timestamp(6)
-  Account    Account[]
-  Session    Session[]
+  role       String   @default("admin")
+
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @updatedAt @db.Timestamp(6)
+
+  accounts Account[]
+  sessions Session[]
 }
 
 model Account {
@@ -92,6 +141,7 @@ model Account {
   type              String
   provider          String
   provideraccountid String
+
   refresh_token     String?
   access_token      String?
   expires_at        Int?
@@ -99,9 +149,10 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-  User              User    @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "account_user_fk")
 
-  @@unique([provider, provideraccountid], map: "account_provider_unique")
+  user User @relation(fields: [userid], references: [id], onDelete: Cascade)
+
+  @@unique([provider, provideraccountid])
 }
 
 model Session {
@@ -109,7 +160,8 @@ model Session {
   sessiontoken String   @unique
   userid       String
   expires      DateTime @db.Timestamp(6)
-  User         User     @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "session_user_fk")
+
+  user User @relation(fields: [userid], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -117,5 +169,5 @@ model VerificationToken {
   token      String   @unique
   expires    DateTime @db.Timestamp(6)
 
-  @@unique([identifier, token], map: "verification_unique")
+  @@unique([identifier, token])
 }

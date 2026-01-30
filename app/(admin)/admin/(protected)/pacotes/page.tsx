@@ -1,6 +1,7 @@
 import Link from "next/link";
 import PacoteCard from "@/components/pacotes/pacote-card";
 import { getPacotesUi, Order } from "@/lib/getPacotesUi";
+import PacotesOrderMenu from "@/components/pacotes/PacotesOrderMenu";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,13 @@ export default async function AdminPacotes({
 }) {
   const params = await searchParams;
 
-  const order: Order = params.order === "data" ? "data" : "nome";
+  const order: Order =
+    params.order === "data" ||
+    params.order === "preco-asc" ||
+    params.order === "preco-desc"
+      ? params.order
+      : "nome";
+
   const pacotes = await getPacotesUi(order);
 
   return (
@@ -22,29 +29,11 @@ export default async function AdminPacotes({
           Pacotes de Viagem
         </h1>
 
-        <div className="flex gap-3">
-          <Link
-            href="/admin/pacotes?order=nome"
-            className={`rounded-md px-4 py-2 text-sm font-medium ${
-              order === "nome"
-                ? "bg-brand text-on-brand"
-                : "bg-surface text-admin-muted hover:bg-brand-soft"
-            }`}
-          >
-            Ordem alfabética
-          </Link>
-
-          <Link
-            href="/admin/pacotes?order=data"
-            className={`rounded-md px-4 py-2 text-sm font-medium ${
-              order === "data"
-                ? "bg-brand text-on-brand"
-                : "bg-surface text-admin-muted hover:bg-brand-soft"
-            }`}
-          >
-            Data do evento
-          </Link>
-        </div>
+        <PacotesOrderMenu
+          order={order}
+          basePath="/admin/pacotes"
+          variant="admin"
+        />
       </div>
 
       {/* Grid */}

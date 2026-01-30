@@ -17,7 +17,7 @@ export function PartnerCard({ name, href, imgMobile, imgDesktop }: Props) {
         group relative flex items-center justify-center
         h-28 lg:h-32
         rounded-xl
-        bg-surface-muted
+        bg-surface-soft
         border border-transparent
         transition-all duration-300
         hover:bg-surface

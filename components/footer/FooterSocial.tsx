@@ -26,7 +26,7 @@ export function FooterSocial() {
       </div>
 
       <ul className="space-y-4 text-sm sm:text-base text-muted">
-        <li className="flex items-center justify-center sm:justify-start gap-3 text-brand">
+        <li className="flex items-center justify-center sm:justify-start gap-3 text-brand text-brand-dark-hover">
           <FontAwesomeIcon icon={faFacebookF} className="w-4 h-4" />
           <a
             href="https://www.facebook.com/biarritzturismosports/"
@@ -38,7 +38,7 @@ export function FooterSocial() {
           </a>
         </li>
 
-        <li className="flex items-center justify-center sm:justify-start gap-3 text-brand">
+        <li className="flex items-center justify-center sm:justify-start gap-3 text-brand text-brand-dark-hover">
           <FontAwesomeIcon icon={faWhatsapp} className="w-4 h-4" />
           <a
             href="https://api.whatsapp.com/send?phone=5551981442091"

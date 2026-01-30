@@ -11,7 +11,12 @@ export default async function PacotesPublicos({
 }) {
   const params = await searchParams;
 
-  const order: Order = params.order === "data" ? "data" : "nome";
+  const order: Order =
+    params.order === "data" ||
+    params.order === "preco-asc" ||
+    params.order === "preco-desc"
+      ? params.order
+      : "nome";
   const pacotes = await getPacotesUi(order);
 
   return (
