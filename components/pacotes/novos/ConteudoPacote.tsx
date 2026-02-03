@@ -9,28 +9,34 @@ const inputBase =
 export default function ConteudoPacote({
   descricao,
   setDescricao,
+  valoresIniciais,
 }: {
   descricao: string;
   setDescricao: (v: string) => void;
+  valoresIniciais?: {
+    texto_destaque?: string;
+    resumo?: string;
+  };
 }) {
   return (
     <Section title="Conteúdo" description="Textos exibidos ao usuário">
       <Field label="Texto de destaque">
-  <textarea
-    name="texto_destaque"
-    rows={2}
-    className={inputBase}
-  />
-</Field>
+        <textarea
+          name="texto_destaque"
+          rows={2}
+          defaultValue={valoresIniciais?.texto_destaque}
+          className={inputBase}
+        />
+      </Field>
 
-<Field label="Resumo">
-  <textarea
-    name="resumo"
-    rows={3}
-    className={inputBase}
-  />
-</Field>
-
+      <Field label="Resumo">
+        <textarea
+          name="resumo"
+          rows={3}
+          defaultValue={valoresIniciais?.resumo}
+          className={inputBase}
+        />
+      </Field>
 
       <Divider />
 

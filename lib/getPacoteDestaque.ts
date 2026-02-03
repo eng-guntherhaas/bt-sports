@@ -5,7 +5,7 @@ export async function getPacoteDestaque() {
     where: { destaque: true },
     include: {
       fotos: {
-        where: { tipo: "banner" }, // banner horizontal
+        where: { tipo: "banner" },
         take: 1,
       },
     },

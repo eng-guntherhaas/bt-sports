@@ -1,47 +1,48 @@
 import { prisma } from "@/lib/prisma";
-import EditarPacoteForm from "./EditarPacoteForm";
+import EditarPacoteClient from "./EditarPacoteClient";
 import { notFound } from "next/navigation";
 
-type Props = {
+export default async function EditarPacotePage({
+  params,
+}: {
   params: Promise<{ id: string }>;
-};
-
-export default async function EditarPacotePage({ params }: Props) {
+}) {
   const { id } = await params;
-
   const pacoteId = Number(id);
 
-   if (!id || Number.isNaN(pacoteId)) {
-    notFound();
-  }
-
-  if (Number.isNaN(pacoteId)) {
-    return <div className="p-6">ID inválido</div>;
-  }
+  if (Number.isNaN(pacoteId)) notFound();
 
   const pacote = await prisma.pacote.findUnique({
     where: { id: pacoteId },
+    include: { fotos: true },
   });
 
-  if (!pacote) {
-    return <div className="p-6">Pacote não encontrado</div>;
-  }
+  if (!pacote) notFound();
 
   const categorias = await prisma.categoriaViagem.findMany({
     orderBy: { nome: "asc" },
   });
 
+  const foto = (tipo: string) => pacote.fotos.find((f) => f.tipo === tipo)?.url;
+
   return (
-    <EditarPacoteForm
-      pacote={pacote}
+    <EditarPacoteClient
+      pacote={{
+        id: pacote.id,
+        nome: pacote.nome,
+        categoria_id: pacote.categoria_id,
+        data_inicio: pacote.data_inicio
+          ? pacote.data_inicio.toISOString().slice(0, 10)
+          : "",
+        preco: pacote.preco ? Number(pacote.preco) : 0,
+        texto_destaque: pacote.texto_destaque ?? "",
+        resumo: pacote.resumo ?? "",
+        descricao: pacote.descricao ?? "",
+        capaUrl: foto("CAPA"),
+        destaqueUrl: foto("DESTAQUE"),
+        bannerUrl: foto("BANNER"),
+      }}
       categorias={categorias}
     />
   );
 }
-
-
-
-
- 
-
-

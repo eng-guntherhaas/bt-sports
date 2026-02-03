@@ -1,4 +1,3 @@
-// lib/getPacotesRaw.ts
 import { prisma } from "@/lib/prisma";
 import { pacotesMock } from "@/mocks/pacotes";
 

@@ -7,6 +7,7 @@ type UploadImagemProps = {
   label: string;
   value: File | null;
   onChange: (file: File | null) => void;
+  imagemAtualUrl?: string;
   aspect?: "16:9" | "4:3" | "21:9";
 };
 
@@ -14,6 +15,7 @@ export default function UploadImagem({
   label,
   value,
   onChange,
+  imagemAtualUrl,
   aspect = "16:9",
 }: UploadImagemProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -38,7 +40,30 @@ export default function UploadImagem({
         {label}
       </label>
 
-      {!value ? (
+      {!value && imagemAtualUrl ? (
+        <div className="space-y-3">
+          <div
+            className={`relative w-full overflow-hidden rounded-md border border-default ${aspectClass}`}
+          >
+            <Image
+              src={imagemAtualUrl}
+              alt={label}
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          <label className="cursor-pointer text-sm font-medium text-brand hover:underline">
+            Substituir imagem
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(e) => onChange(e.target.files?.[0] ?? null)}
+            />
+          </label>
+        </div>
+      ) : !value ? (
         <label className="flex cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-border-muted bg-surface-muted p-6 text-center hover:border-brand">
           <span className="text-sm text-admin-muted">
             Arraste uma imagem aqui ou
@@ -56,17 +81,15 @@ export default function UploadImagem({
       ) : (
         <div className="space-y-3">
           {previewUrl && (
-            <div className="w-full sm:max-w-sm">
-              <div
-                className={`relative w-full overflow-hidden rounded-md border border-default ${aspectClass}`}
-              >
-                <Image
-                  src={previewUrl}
-                  alt={label}
-                  fill
-                  className="object-cover"
-                />
-              </div>
+            <div
+              className={`relative w-full overflow-hidden rounded-md border border-default ${aspectClass}`}
+            >
+              <Image
+                src={previewUrl}
+                alt={label}
+                fill
+                className="object-cover"
+              />
             </div>
           )}
 

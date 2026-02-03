@@ -16,7 +16,6 @@ export async function getPacotesRecentes(limit = 6) {
       },
     });
 
-    // se não veio nada do banco, cai no mock
     if (!pacotes.length) {
       return pacotesMock.slice(0, limit);
     }
