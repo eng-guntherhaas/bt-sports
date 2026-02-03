@@ -6,7 +6,10 @@ import ImagensPacote from "@/components/pacotes/novos/ImagensPacote";
 import ConteudoPacote from "@/components/pacotes/novos/ConteudoPacote";
 import StickyActions from "@/components/pacotes/novos/StickyActions";
 
-type Categoria = { id: number; nome: string };
+type Categoria = {
+  id: number;
+  nome: string;
+};
 
 export default function NovoPacotePage() {
   const [loading, setLoading] = useState(false);
@@ -43,14 +46,15 @@ export default function NovoPacotePage() {
       const formData = new FormData(form);
 
       const payload = {
-        nome: formData.get("nome"),
-        categoria_id: categoriaSelecionada,
-        data_inicio: formData.get("data_inicio"),
-        preco: Number(formData.get("preco")),
-        resumo: formData.get("resumo"),
-        texto_destaque: formData.get("texto_destaque"),
-        descricao,
-      };
+  nome: formData.get("nome"),
+  categoria_id: categoriaSelecionada,
+  data_inicio: formData.get("data_inicio") || undefined,
+  preco: Number(formData.get("preco")),
+  resumo: formData.get("resumo") || undefined,
+  texto_destaque: formData.get("texto_destaque") || undefined,
+  descricao,
+};
+
 
       const res = await fetch("/api/admin/pacotes", {
         method: "POST",
@@ -60,7 +64,7 @@ export default function NovoPacotePage() {
 
       if (!res.ok) throw new Error("Erro ao criar pacote");
 
-      const pacote = await res.json();
+      const { pacote } = await res.json();
 
       async function uploadImagem(file: File, tipo: string) {
         const fd = new FormData();
@@ -100,6 +104,7 @@ export default function NovoPacotePage() {
         <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
           <InformacoesBasicas
             categorias={categorias}
+            setCategorias={setCategorias}
             categoriaSelecionada={categoriaSelecionada}
             setCategoriaSelecionada={setCategoriaSelecionada}
             criandoCategoria={criandoCategoria}

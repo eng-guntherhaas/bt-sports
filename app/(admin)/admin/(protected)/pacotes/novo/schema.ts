@@ -5,17 +5,19 @@ export const pacoteSchema = z.object({
 
   categoria_id: z
     .number()
-    .int("Categoria inválida")
+    .int()
     .positive("Categoria é obrigatória"),
 
   data_inicio: z.string().optional(),
 
-  preco: z.coerce.number().positive("Preço deve ser maior que zero"),
+  preco: z.coerce
+    .number()
+    .positive("Preço deve ser maior que zero"),
 
-  moeda: z.enum(["EUR", "USD", "BRL", "GBP"]),
+  moeda: z.enum(["EUR", "USD", "BRL", "GBP"]).optional(),
 
-  texto_destaque: z.string().optional(),
-  resumo: z.string().optional(),
+  texto_destaque: z.string().nullable().optional(),
+  resumo: z.string().nullable().optional(),
   descricao: z.string().optional(),
 });
 

@@ -1,5 +1,6 @@
 import Section from "./Section";
 import Field from "./Field";
+import React from "react";
 
 const inputBase =
   "mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default text-admin focus-ring-brand";
@@ -11,6 +12,7 @@ type Categoria = {
 
 type InformacoesBasicasProps = {
   categorias: Categoria[];
+  setCategorias: React.Dispatch<React.SetStateAction<Categoria[]>>;
   categoriaSelecionada: number | "";
   setCategoriaSelecionada: (value: number | "") => void;
   criandoCategoria: boolean;
@@ -21,6 +23,7 @@ type InformacoesBasicasProps = {
 
 export default function InformacoesBasicas({
   categorias,
+  setCategorias,
   categoriaSelecionada,
   setCategoriaSelecionada,
   criandoCategoria,
@@ -29,10 +32,7 @@ export default function InformacoesBasicas({
   setNovaCategoria,
 }: InformacoesBasicasProps) {
   return (
-    <Section
-      title="Informações básicas"
-      description="Dados principais do pacote"
-    >
+    <Section title="Informações básicas" description="Dados principais do pacote">
       <Field label="Nome do pacote" required>
         <input name="nome" required className={inputBase} />
       </Field>
@@ -65,14 +65,47 @@ export default function InformacoesBasicas({
                 value={novaCategoria}
                 onChange={(e) => setNovaCategoria(e.target.value)}
                 className={inputBase}
+                placeholder="Nome da nova categoria"
               />
+
               <div className="flex gap-3">
                 <button
                   type="button"
-                  className="rounded-md bg-brand px-4 py-2 text-sm font-semibold text-on-brand bg-brand-dark-hover"
+                  onClick={async () => {
+                    if (!novaCategoria.trim()) {
+                      alert("Informe o nome da categoria");
+                      return;
+                    }
+
+                    const res = await fetch(
+                      "/api/admin/categorias-viagem",
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ nome: novaCategoria }),
+                      }
+                    );
+
+                    if (!res.ok) {
+                      alert("Erro ao criar categoria");
+                      return;
+                    }
+
+                    const categoriaCriada = await res.json();
+
+                    setCategorias((prev) => [...prev, categoriaCriada]);
+                    setCategoriaSelecionada(categoriaCriada.id);
+
+                    setCriandoCategoria(false);
+                    setNovaCategoria("");
+                  }}
+                  className="rounded-md bg-brand px-4 py-2 text-sm font-semibold text-on-brand"
                 >
                   Salvar
                 </button>
+
                 <button
                   type="button"
                   onClick={() => {

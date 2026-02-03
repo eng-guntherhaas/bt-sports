@@ -6,7 +6,6 @@ export default async function CategoriaPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  // Await params to get the actual slug value
   const { slug } = await params;
 
   const categoria = await prisma.categoriaViagem.findUnique({

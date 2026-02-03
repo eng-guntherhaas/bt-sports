@@ -1,6 +1,15 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+function gerarSlug(nome: string) {
+  return nome
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
+}
+
 export async function GET() {
   const categorias = await prisma.categoriaViagem.findMany({
     orderBy: { nome: "asc" },
@@ -10,20 +19,32 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const body = await req.json();
+  try {
+    const body = await req.json();
 
-  const slug = body.nome
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\s+/g, "-");
+    if (!body.nome || !body.nome.trim()) {
+      return NextResponse.json(
+        { error: "Nome da categoria é obrigatório" },
+        { status: 400 }
+      );
+    }
 
-  const categoria = await prisma.categoriaViagem.create({
-    data: {
-      nome: body.nome,
-      slug,
-    },
-  });
+    const slug = gerarSlug(body.nome);
 
-  return NextResponse.json(categoria);
+    const categoria = await prisma.categoriaViagem.create({
+      data: {
+        nome: body.nome.trim(),
+        slug,
+      },
+    });
+
+    return NextResponse.json(categoria, { status: 201 });
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      { error: "Erro ao criar categoria" },
+      { status: 500 }
+    );
+  }
 }

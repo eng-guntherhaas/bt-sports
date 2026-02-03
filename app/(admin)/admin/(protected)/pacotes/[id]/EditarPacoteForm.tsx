@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import type { PacoteComRelacoes, Categoria } from "./types";
+import { toast } from "sonner";
+import type { Pacote, CategoriaViagem } from "@/generated/prisma";
 
 type Props = {
-  pacote: PacoteComRelacoes;
-  categorias: Categoria[];
+  pacote: Pacote;
+  categorias: CategoriaViagem[];
 };
 
 export default function EditarPacoteForm({ pacote, categorias }: Props) {
@@ -16,40 +17,66 @@ export default function EditarPacoteForm({ pacote, categorias }: Props) {
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
+    try {
+      const formData = new FormData(e.currentTarget);
 
-    const payload = {
-      nome: String(formData.get("nome")),
-      resumo: String(formData.get("resumo") ?? ""),
-      texto_destaque: String(formData.get("texto_destaque") ?? ""),
-      descricao: String(formData.get("descricao") ?? ""),
-      preco: Number(formData.get("preco")),
-      categoria_id: Number(formData.get("categoria_id")),
-    };
+      const payload = {
+        nome: String(formData.get("nome")),
+        resumo: String(formData.get("resumo") ?? ""),
+        texto_destaque: String(formData.get("texto_destaque") ?? ""),
+        descricao: String(formData.get("descricao") ?? ""),
+        preco: Number(formData.get("preco")),
+        categoria_id: Number(formData.get("categoria_id")),
+      };
 
-    await fetch(`/api/admin/pacotes/${pacote.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+      const res = await fetch(`/api/admin/pacotes/${pacote.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    setLoading(false);
-    alert("Pacote atualizado");
+      if (!res.ok) {
+        throw new Error("Erro ao salvar");
+      }
+
+      toast.success("Pacote atualizado com sucesso");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao atualizar pacote");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function togglePublicacao(publicar: boolean) {
     setLoading(true);
 
-    await fetch(`/api/admin/pacotes/${pacote.id}/publicar`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        status: publicar ? "PUBLICADO" : "RASCUNHO",
-      }),
-    });
+    try {
+      const res = await fetch(
+        `/api/admin/pacotes/${pacote.id}/publicar`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            status: publicar ? "PUBLICADO" : "RASCUNHO",
+          }),
+        }
+      );
 
-    setStatus(publicar ? "PUBLICADO" : "RASCUNHO");
-    setLoading(false);
+      if (!res.ok) {
+        throw new Error("Erro ao alterar status");
+      }
+
+      setStatus(publicar ? "PUBLICADO" : "RASCUNHO");
+      toast.success(
+        publicar ? "Pacote publicado" : "Pacote despublicado"
+      );
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao alterar status");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -78,11 +105,19 @@ export default function EditarPacoteForm({ pacote, categorias }: Props) {
         </button>
 
         {status === "RASCUNHO" ? (
-          <button type="button" onClick={() => togglePublicacao(true)}>
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => togglePublicacao(true)}
+          >
             Publicar
           </button>
         ) : (
-          <button type="button" onClick={() => togglePublicacao(false)}>
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => togglePublicacao(false)}
+          >
             Despublicar
           </button>
         )}

@@ -16,12 +16,21 @@ export default function ConteudoPacote({
   return (
     <Section title="Conteúdo" description="Textos exibidos ao usuário">
       <Field label="Texto de destaque">
-        <textarea rows={2} className={inputBase} />
-      </Field>
+  <textarea
+    name="texto_destaque"
+    rows={2}
+    className={inputBase}
+  />
+</Field>
 
-      <Field label="Resumo">
-        <textarea rows={3} className={inputBase} />
-      </Field>
+<Field label="Resumo">
+  <textarea
+    name="resumo"
+    rows={3}
+    className={inputBase}
+  />
+</Field>
+
 
       <Divider />
 
