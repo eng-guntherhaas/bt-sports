@@ -32,8 +32,62 @@ export default function NovoPacotePage() {
       .catch(() => alert("Erro ao carregar categorias"));
   }, []);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    try {
+      setLoading(true);
+      setLoadingMessage("Criando pacote...");
+
+      const form = e.target as HTMLFormElement;
+      const formData = new FormData(form);
+
+      const payload = {
+        nome: formData.get("nome"),
+        categoria_id: categoriaSelecionada,
+        data_inicio: formData.get("data_inicio"),
+        preco: Number(formData.get("preco")),
+        resumo: formData.get("resumo"),
+        texto_destaque: formData.get("texto_destaque"),
+        descricao,
+      };
+
+      const res = await fetch("/api/admin/pacotes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error("Erro ao criar pacote");
+
+      const pacote = await res.json();
+
+      async function uploadImagem(file: File, tipo: string) {
+        const fd = new FormData();
+        fd.append("file", file);
+        fd.append("tipo", tipo);
+        fd.append("pacoteId", pacote.id.toString());
+
+        await fetch("/api/admin/pacotes/upload", {
+          method: "POST",
+          body: fd,
+        });
+      }
+
+      setLoadingMessage("Enviando imagens...");
+
+      if (fotoCapa) await uploadImagem(fotoCapa, "CAPA");
+      if (fotoDestaque) await uploadImagem(fotoDestaque, "DESTAQUE");
+      if (fotoBanner) await uploadImagem(fotoBanner, "BANNER");
+
+      window.location.href = `/admin/pacotes/${pacote.id}`;
+    } catch (err) {
+      alert("Erro ao salvar pacote");
+      console.error(err);
+    } finally {
+      setLoading(false);
+      setLoadingMessage("");
+    }
   }
 
   return (

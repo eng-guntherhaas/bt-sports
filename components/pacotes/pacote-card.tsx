@@ -6,7 +6,7 @@ type PacoteCardProps = {
   resumo?: string;
   preco?: number;
   dataEvento?: string;
-  imageUrl?: string;
+  imageUrl?: string | null;
   href?: string;
   badge?: string;
   variant?: "public" | "admin";

@@ -23,7 +23,6 @@ export default async function AdminPacotes({
 
   return (
     <div className="bg-admin min-h-screen px-4 py-8 sm:px-6 sm:py-10">
-      {/* Header */}
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-xl sm:text-2xl font-bold text-admin">
           Pacotes de Viagem
@@ -36,7 +35,6 @@ export default async function AdminPacotes({
         />
       </div>
 
-      {/* Grid */}
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(260px,1fr))]">
         {/* Novo pacote */}
         <Link
@@ -50,7 +48,6 @@ export default async function AdminPacotes({
           </div>
         </Link>
 
-        {/* Pacotes */}
         {pacotes.map((pacote) => (
           <PacoteCard
             key={pacote.id}

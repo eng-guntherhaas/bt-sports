@@ -3,7 +3,10 @@ import { z } from "zod";
 export const pacoteSchema = z.object({
   nome: z.string().min(3, "Nome muito curto"),
 
-  categoria_id: z.coerce.number().nullable().optional(),
+  categoria_id: z
+    .number()
+    .int("Categoria inválida")
+    .positive("Categoria é obrigatória"),
 
   data_inicio: z.string().optional(),
 
