@@ -7,7 +7,7 @@ export type PacoteRaw = {
   resumo?: string | null;
   preco?: number | { toNumber(): number } | null;
   data_inicio?: Date | string | null;
-  slug?: string | null;
+  slug?: string;
   imageUrl?: string;
   fotos?: {
     url: string;

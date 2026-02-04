@@ -1,3 +1,4 @@
+import { TipoFoto } from "@/generated/prisma";
 import { prisma } from "@/lib/prisma";
 
 export async function getPacoteDestaque() {
@@ -5,7 +6,7 @@ export async function getPacoteDestaque() {
     where: { destaque: true },
     include: {
       fotos: {
-        where: { tipo: "banner" },
+        where: { tipo: TipoFoto.BANNER },
         take: 1,
       },
     },
@@ -19,6 +20,6 @@ export async function getPacoteDestaque() {
     resumo: pacote.resumo,
     preco: pacote.preco ? Number(pacote.preco) : undefined,
     imageUrl: pacote.fotos[0]?.url,
-    href: `/pacotes/${pacote.slug ?? pacote.id}`,
+    href: `/pacotes/${pacote.slug}`,
   };
 }

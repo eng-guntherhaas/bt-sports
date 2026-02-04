@@ -18,28 +18,13 @@ export default function PacoteCard({
   preco,
   dataEvento,
   imageUrl,
-  href = "#",
+  href,
   badge,
   variant = "public",
 }: PacoteCardProps) {
-  const Wrapper = href ? Link : "div";
-
-  return (
-    <Wrapper
-      href={href}
-      className="
-        group relative block
-        overflow-hidden
-        rounded-xl
-        border border-default
-        bg-surface
-        transition
-        sm:hover:-translate-y-0.5
-        sm:hover:shadow-lg
-      "
-    >
-      {/* IMAGEM */}
-      <div className="relative aspect-[4/3] w-full bg-surface-muted">
+  const Content = (
+    <>
+      <div className="relative aspect-4/3 w-full bg-surface-muted">
         {imageUrl ? (
           <Image src={imageUrl} alt={nome} fill className="object-cover" />
         ) : (
@@ -48,42 +33,21 @@ export default function PacoteCard({
           </div>
         )}
 
-        {/* Overlay brand-soft (desktop hover) */}
-        <div
-          className="
-            pointer-events-none
-            absolute inset-0
-            bg-brand-soft/60
-            opacity-0
-            transition-opacity
-            sm:group-hover:opacity-100
-          "
-        />
+        <div className="pointer-events-none absolute inset-0 bg-brand-soft/60 opacity-0 transition-opacity sm:group-hover:opacity-100" />
 
-        {/* Badge */}
         {badge && (
-          <span
-            className="
-              absolute left-3 top-3 z-10
-              rounded-full
-              bg-brand
-              px-3 py-1
-              text-xs font-semibold
-              text-on-brand
-            "
-          >
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-on-brand">
             {badge}
           </span>
         )}
       </div>
 
-      {/* CONTEÚDO */}
       <div className="relative z-10 bg-surface px-4 py-4 sm:px-5">
         {dataEvento && (
           <span className="text-xs font-medium text-muted">{dataEvento}</span>
         )}
 
-        <h3 className="mt-1 text-base sm:text-lg font-semibold text-color-text leading-snug">
+        <h3 className="mt-1 text-base sm:text-lg font-semibold leading-snug">
           {nome}
         </h3>
 
@@ -97,6 +61,28 @@ export default function PacoteCard({
           </div>
         )}
       </div>
-    </Wrapper>
+    </>
+  );
+
+  return href ? (
+    <Link
+      href={href}
+      className="
+        group relative block overflow-hidden rounded-xl
+        border border-default bg-surface transition
+        sm:hover:-translate-y-0.5 sm:hover:shadow-lg
+      "
+    >
+      {Content}
+    </Link>
+  ) : (
+    <div
+      className="
+        group relative block overflow-hidden rounded-xl
+        border border-default bg-surface
+      "
+    >
+      {Content}
+    </div>
   );
 }

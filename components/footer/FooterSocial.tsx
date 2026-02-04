@@ -10,8 +10,7 @@ export function FooterSocial() {
         Nos acompanhe
       </h2>
 
-      {/* Instagram */}
-      <div className="mt-6 mb-10">
+      <div className="mt-6 mb-10 flex justify-center sm:block">
         <blockquote
           className="instagram-media"
           data-instgrm-permalink="https://www.instagram.com/biarritzturismosports/"
@@ -19,7 +18,6 @@ export function FooterSocial() {
           style={{
             width: "100%",
             maxWidth: 360,
-            margin: "0 auto",
             borderRadius: 12,
           }}
         />
@@ -55,7 +53,6 @@ export function FooterSocial() {
         (51) 3026.2233
       </p>
 
-      {/* Script oficial do Instagram */}
       <script async src="https://www.instagram.com/embed.js"></script>
     </div>
   );

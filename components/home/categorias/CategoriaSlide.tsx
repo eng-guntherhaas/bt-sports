@@ -1,5 +1,4 @@
 "use client";
-
 import CategoriaButton from "./CategoriaButton";
 
 type Props = {
@@ -11,11 +10,11 @@ export default function CategoriaSlide({ slug, nome }: Props) {
   return (
     <div
       className="
-      h-18
-      sm:h-22
-      flex
-      items-center
-    "
+        h-18
+        sm:h-22
+        flex
+        items-center
+      "
     >
       <CategoriaButton href={`/categoria/${slug}`} label={nome} />
     </div>

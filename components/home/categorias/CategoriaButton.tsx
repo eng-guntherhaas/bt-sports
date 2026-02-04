@@ -16,16 +16,16 @@ export default function CategoriaButton({ href, label }: Props) {
         h-full w-full
         items-center justify-center
         rounded-md
-        bg-surface-muted
-        border border-border-muted
-        text-brand
-        text-surface-hover
+        bg-brand
+        border border-brand
+        text-on-brand
+        text-brand-hover
         text-xs
         font-semibold
         uppercase
         tracking-wide
         transition
-        bg-brand-hover
+        bg-surface-muted-hover
       "
     >
       {/* hover overlay sutil */}

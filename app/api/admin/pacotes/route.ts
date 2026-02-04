@@ -8,11 +8,18 @@ export async function POST(req: Request) {
     const body = await req.json();
     const data = pacoteSchema.parse(body);
 
-    const slug = slugify(data.nome, {
+    const slugBase = slugify(data.nome, {
       lower: true,
       strict: true,
       trim: true,
     });
+
+    let slug = slugBase;
+    let count = 1;
+
+    while (await prisma.pacote.findUnique({ where: { slug } })) {
+      slug = `${slugBase}-${count++}`;
+    }
 
     const pacote = await prisma.pacote.create({
       data: {
@@ -28,23 +35,10 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ ok: true, pacote }, { status: 201 });
-  } catch (error: any) {
-    console.error(error);
-
-    if (error?.name === "ZodError") {
-      return NextResponse.json(
-        {
-          ok: false,
-          error: "Dados inválidos",
-          issues: error.issues,
-        },
-        { status: 400 }
-      );
-    }
-
+    return NextResponse.json({ pacote }, { status: 201 });
+  } catch (error) {
     return NextResponse.json(
-      { ok: false, error: "Erro ao criar pacote" },
+      { error: "Erro ao criar pacote" },
       { status: 500 }
     );
   }

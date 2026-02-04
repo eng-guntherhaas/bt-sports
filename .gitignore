@@ -43,6 +43,7 @@ next-env.d.ts
 
 .env.local
 .env
+/.vscode
 /generated/prisma
 
 public/uploads

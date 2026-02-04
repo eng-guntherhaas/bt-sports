@@ -1,4 +1,5 @@
 import PacoteCard from "@/components/pacotes/pacote-card";
+import Link from "next/link";
 
 type Pacote = {
   id: number;
@@ -47,7 +48,7 @@ export default function PacotesRecentes({ pacotes }: Props) {
 
         {/* CTA opcional */}
         <div className="mt-8 text-center">
-          <a
+          <Link
             href="/pacotes"
             className="
               inline-flex items-center
@@ -61,7 +62,7 @@ export default function PacotesRecentes({ pacotes }: Props) {
             "
           >
             Ver todos os pacotes
-          </a>
+          </Link>
         </div>
       </div>
     </section>

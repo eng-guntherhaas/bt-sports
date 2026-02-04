@@ -19,8 +19,8 @@ export default function CategoriaNavButton({ id, direction }: Props) {
         border border-border-muted
         text-brand text-3xl
         transition
-        hover:bg-brand/10
-        hover:border-brand/40
+        bg-brand-hover
+        border-brand-hover
       "
     >
       {direction === "prev" ? "‹" : "›"}

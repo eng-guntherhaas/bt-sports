@@ -1,3 +1,4 @@
+import { TipoFoto } from "@/generated/prisma";
 import { prisma } from "@/lib/prisma";
 import { pacotesMock } from "@/mocks/pacotes";
 
@@ -10,7 +11,7 @@ export async function getPacotesRecentes(limit = 6) {
       take: limit,
       include: {
         fotos: {
-          where: { tipo: "capa" },
+          where: { tipo: TipoFoto.CAPA },
           take: 1,
         },
       },
@@ -29,7 +30,7 @@ export async function getPacotesRecentes(limit = 6) {
         ? pacote.data_inicio.toISOString().split("T")[0]
         : undefined,
       imageUrl: pacote.fotos[0]?.url,
-      href: `/pacotes/${pacote.id}`,
+      href: `/pacotes/${pacote.slug}`,
     }));
   } catch (error) {
     console.error("[getPacotesRecentes]", error);
