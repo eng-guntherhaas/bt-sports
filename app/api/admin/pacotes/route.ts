@@ -31,6 +31,7 @@ export async function POST(req: Request) {
         texto_destaque: data.texto_destaque,
         resumo: data.resumo,
         descricao: data.descricao,
+        destaque: data.destaque ?? false,
         status: "RASCUNHO",
       },
     });

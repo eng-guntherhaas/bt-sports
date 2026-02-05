@@ -41,6 +41,7 @@ export default async function EditarPacotePage({
         capaUrl: foto("CAPA"),
         destaqueUrl: foto("DESTAQUE"),
         bannerUrl: foto("BANNER"),
+        destaque: pacote.destaque,
       }}
       categorias={categorias}
     />

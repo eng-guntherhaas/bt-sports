@@ -8,12 +8,10 @@ type Props = {
 };
 
 export default async function PacotePage({ params }: Props) {
-  if (!params.slug) {
-    notFound();
-  }
+  const { slug } = await params;
 
   const pacote = await prisma.pacote.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
     include: {
       fotos: { orderBy: { ordem: "asc" } },
       categoria: true,

@@ -25,7 +25,6 @@ export default function PacotesRecentes({ pacotes }: Props) {
           <span className="text-brand">Pacotes</span> recentes
         </h2>
 
-        {/* GRID MOBILE FIRST */}
         <div
           className="
             grid grid-cols-1 gap-4
@@ -47,23 +46,25 @@ export default function PacotesRecentes({ pacotes }: Props) {
         </div>
 
         {/* CTA opcional */}
-        <div className="mt-8 text-center">
-          <Link
-            href="/pacotes"
-            className="
-              inline-flex items-center
-              rounded-full
-              border border-brand
-              px-5 py-2
-              text-sm font-medium
-              text-brand
-              transition
-              hover:bg-brand hover:text-on-brand
+        {pacotes.length >= 6 && (
+          <div className="mt-8 text-center">
+            <Link
+              href="/pacotes"
+              className="
+            inline-flex items-center
+            rounded-full
+            border border-brand
+            px-5 py-2
+            text-sm font-medium
+            text-brand
+            transition
+            hover:bg-brand hover:text-on-brand
             "
-          >
-            Ver todos os pacotes
-          </Link>
-        </div>
+            >
+              Ver todos os pacotes
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

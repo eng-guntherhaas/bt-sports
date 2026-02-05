@@ -28,6 +28,7 @@ type InformacoesBasicasProps = {
     data_inicio?: string;
     preco?: number;
     moeda?: string;
+    destaque?: boolean;
   };
 };
 
@@ -58,30 +59,22 @@ export default function InformacoesBasicas({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label="Categoria">
-          {!criandoCategoria ? (
-            <select
-              value={categoriaSelecionada}
-              onChange={(e) =>
-                e.target.value === "nova"
-                  ? setCriandoCategoria(true)
-                  : setCategoriaSelecionada(
-                      e.target.value ? Number(e.target.value) : ""
-                    )
-              }
-              className={inputBase}
-            >
-              <option value="">Selecione uma categoria</option>
-              {categorias.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.nome}
-                </option>
-              ))}
-              <option value="nova">Nova categoria +</option>
-            </select>
-          ) : (
-            /* criação de categoria – igual ao seu código */
-            <div />
-          )}
+          <select
+            value={categoriaSelecionada}
+            onChange={(e) =>
+              setCategoriaSelecionada(
+                e.target.value ? Number(e.target.value) : ""
+              )
+            }
+            className={inputBase}
+          >
+            <option value="">Selecione uma categoria</option>
+            {categorias.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.nome}
+              </option>
+            ))}
+          </select>
         </Field>
 
         <Field label="Data de início">
@@ -116,6 +109,19 @@ export default function InformacoesBasicas({
             <option value="GBP">GBP</option>
           </select>
         </Field>
+      </div>
+
+      {/* ⭐ DESTAQUE */}
+      <div className="pt-2">
+        <label className="flex items-center gap-3 text-sm font-medium text-admin">
+          <input
+            type="checkbox"
+            name="destaque"
+            defaultChecked={valoresIniciais?.destaque}
+            className="h-4 w-4 rounded border-default text-brand focus:ring-brand"
+          />
+          Destacar este pacote na home
+        </label>
       </div>
     </Section>
   );

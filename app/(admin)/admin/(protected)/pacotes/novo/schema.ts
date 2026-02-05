@@ -14,15 +14,18 @@ export const pacoteSchema = z.object({
   texto_destaque: z.string().nullable().optional(),
   resumo: z.string().nullable().optional(),
   descricao: z.string().optional(),
+  destaque: z.boolean().optional(),
 });
 
 export const pacotePatchSchema = z.object({
-  nome: z.string().min(3).optional(),
-  categoria_id: z.number().int().optional(),
-  preco: z.number().positive().optional(),
-  texto_destaque: z.string().optional().nullable(),
-  resumo: z.string().optional().nullable(),
-  descricao: z.string().optional().nullable(),
+  nome: z.string().min(3),
+  categoria_id: z.number(),
+  data_inicio: z.string().optional(),
+  preco: z.number().positive(),
+  texto_destaque: z.string().optional(),
+  resumo: z.string().optional(),
+  descricao: z.string().optional(),
+  destaque: z.boolean().optional(),
 });
 
 export type PacoteFormData = z.infer<typeof pacoteSchema>;

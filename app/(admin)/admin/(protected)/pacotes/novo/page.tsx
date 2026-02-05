@@ -46,15 +46,15 @@ export default function NovoPacotePage() {
       const formData = new FormData(form);
 
       const payload = {
-  nome: formData.get("nome"),
-  categoria_id: categoriaSelecionada,
-  data_inicio: formData.get("data_inicio") || undefined,
-  preco: Number(formData.get("preco")),
-  resumo: formData.get("resumo") || undefined,
-  texto_destaque: formData.get("texto_destaque") || undefined,
-  descricao,
-};
-
+        nome: formData.get("nome"),
+        categoria_id: categoriaSelecionada,
+        data_inicio: formData.get("data_inicio") || undefined,
+        preco: Number(formData.get("preco")),
+        resumo: formData.get("resumo") || undefined,
+        texto_destaque: formData.get("texto_destaque") || undefined,
+        descricao,
+        destaque: formData.get("destaque") === "on",
+      };
 
       const res = await fetch("/api/admin/pacotes", {
         method: "POST",
