@@ -54,7 +54,6 @@ export default function PacoteDestaque({
           />
         </div>
 
-        {/* Conteúdo */}
         <div className="absolute inset-0 flex items-end">
           <div className="mx-auto w-full max-w-7xl px-6 pb-6 sm:px-10 sm:pb-10">
             <div className="max-w-3xl space-y-3">

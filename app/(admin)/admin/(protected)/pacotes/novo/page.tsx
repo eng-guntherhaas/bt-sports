@@ -112,7 +112,6 @@ export default function NovoPacotePage() {
             novaCategoria={novaCategoria}
             setNovaCategoria={setNovaCategoria}
           />
-
           <ImagensPacote
             fotoCapa={fotoCapa}
             setFotoCapa={setFotoCapa}
@@ -121,7 +120,6 @@ export default function NovoPacotePage() {
             fotoBanner={fotoBanner}
             setFotoBanner={setFotoBanner}
           />
-
           <ConteudoPacote descricao={descricao} setDescricao={setDescricao} />
 
           <StickyActions

@@ -67,14 +67,12 @@ export default function AdminLoginPage() {
             shadow-sm
           "
         >
-          {/* Erro */}
           {error && (
             <div className="rounded-md bg-error/10 px-4 py-3 text-sm text-error">
               {error}
             </div>
           )}
 
-          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-color-text">
               Email
@@ -96,7 +94,6 @@ export default function AdminLoginPage() {
             />
           </div>
 
-          {/* Senha */}
           <div>
             <label className="block text-sm font-medium text-color-text">
               Senha
@@ -118,7 +115,6 @@ export default function AdminLoginPage() {
             />
           </div>
 
-          {/* Botão */}
           <button
             type="submit"
             disabled={loading}

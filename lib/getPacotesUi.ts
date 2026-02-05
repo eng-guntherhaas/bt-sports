@@ -61,7 +61,7 @@ export async function getPacotesUi(order: Order) {
     nome: p.nome,
     resumo: p.resumo ?? "",
     preco: Number(p.preco ?? 0),
-    imageUrl: p.fotos[0]?.url || "/placeholder.jpg",
+    imageUrl: p.fotos[0]?.url,
     href: `/pacotes/${p.slug}`,
   }));
 }

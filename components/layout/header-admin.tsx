@@ -64,9 +64,7 @@ export default function HeaderAdmin() {
         />
       }
     >
-      {/* 🔹 DESKTOP NAV ADMIN (igual ao original) */}
       <div className="hidden lg:flex items-center gap-x-8">
-        {/* 🌍 Área pública */}
         <div className="flex gap-x-6">
           <Link
             href="/sobre"
@@ -88,10 +86,8 @@ export default function HeaderAdmin() {
           </Link>
         </div>
 
-        {/* Separador */}
         <div className="h-6 w-px bg-border-admin" />
 
-        {/* 🔒 Área admin */}
         <div className="flex gap-x-6 items-center">
           <Link
             href="/admin"

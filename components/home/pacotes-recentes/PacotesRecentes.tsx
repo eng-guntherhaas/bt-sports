@@ -45,7 +45,6 @@ export default function PacotesRecentes({ pacotes }: Props) {
           ))}
         </div>
 
-        {/* CTA opcional */}
         {pacotes.length >= 6 && (
           <div className="mt-8 text-center">
             <Link

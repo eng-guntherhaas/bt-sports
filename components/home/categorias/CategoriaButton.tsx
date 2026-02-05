@@ -28,7 +28,6 @@ export default function CategoriaButton({ href, label }: Props) {
         bg-surface-muted-hover
       "
     >
-      {/* hover overlay sutil */}
       <div
         className="
           absolute inset-0

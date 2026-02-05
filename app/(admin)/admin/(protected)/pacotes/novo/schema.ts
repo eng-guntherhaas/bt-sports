@@ -11,8 +11,18 @@ export const pacoteSchema = z.object({
 
   moeda: z.enum(["EUR", "USD", "BRL", "GBP"]).optional(),
 
-  texto_destaque: z.string().nullable().optional(),
-  resumo: z.string().nullable().optional(),
+  texto_destaque: z
+    .string()
+    .max(80, "Texto de destaque deve ter no máximo 80 caracteres")
+    .optional()
+    .nullable(),
+
+  resumo: z
+    .string()
+    .max(160, "Resumo deve ter no máximo 160 caracteres")
+    .optional()
+    .nullable(),
+
   descricao: z.string().optional(),
   destaque: z.boolean().optional(),
 });

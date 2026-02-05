@@ -21,23 +21,33 @@ export async function POST(req: Request) {
       slug = `${slugBase}-${count++}`;
     }
 
-    const pacote = await prisma.pacote.create({
-      data: {
-        nome: data.nome,
-        slug,
-        categoria_id: data.categoria_id,
-        data_inicio: data.data_inicio ? new Date(data.data_inicio) : null,
-        preco: data.preco,
-        texto_destaque: data.texto_destaque,
-        resumo: data.resumo,
-        descricao: data.descricao,
-        destaque: data.destaque ?? false,
-        status: "RASCUNHO",
-      },
+    const pacote = await prisma.$transaction(async (tx) => {
+      if (data.destaque === true) {
+        await tx.pacote.updateMany({
+          where: { destaque: true },
+          data: { destaque: false },
+        });
+      }
+
+      return tx.pacote.create({
+        data: {
+          nome: data.nome,
+          slug,
+          categoria_id: data.categoria_id,
+          data_inicio: data.data_inicio ? new Date(data.data_inicio) : null,
+          preco: data.preco,
+          texto_destaque: data.texto_destaque,
+          resumo: data.resumo,
+          descricao: data.descricao,
+          destaque: data.destaque ?? false,
+        },
+      });
     });
 
     return NextResponse.json({ pacote }, { status: 201 });
   } catch (error) {
+    console.error("POST /api/admin/pacotes", error);
+
     return NextResponse.json(
       { error: "Erro ao criar pacote" },
       { status: 500 }

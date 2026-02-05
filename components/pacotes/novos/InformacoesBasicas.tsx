@@ -59,22 +59,84 @@ export default function InformacoesBasicas({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label="Categoria">
-          <select
-            value={categoriaSelecionada}
-            onChange={(e) =>
-              setCategoriaSelecionada(
-                e.target.value ? Number(e.target.value) : ""
-              )
-            }
-            className={inputBase}
-          >
-            <option value="">Selecione uma categoria</option>
-            {categorias.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nome}
-              </option>
-            ))}
-          </select>
+          {!criandoCategoria ? (
+            <select
+              value={categoriaSelecionada}
+              onChange={(e) => {
+                if (e.target.value === "nova") {
+                  setCriandoCategoria(true);
+                } else {
+                  setCategoriaSelecionada(
+                    e.target.value ? Number(e.target.value) : ""
+                  );
+                }
+              }}
+              className={inputBase}
+            >
+              <option value="">Selecione uma categoria</option>
+
+              {categorias.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.nome}
+                </option>
+              ))}
+
+              <option value="nova">Nova categoria +</option>
+            </select>
+          ) : (
+            <div className="rounded-md border border-default bg-surface-muted p-4 space-y-3">
+              <input
+                value={novaCategoria}
+                onChange={(e) => setNovaCategoria(e.target.value)}
+                placeholder="Nome da nova categoria"
+                className={inputBase}
+              />
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (!novaCategoria.trim()) return;
+
+                    const res = await fetch("/api/admin/categorias-viagem", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({ nome: novaCategoria }),
+                    });
+
+                    if (!res.ok) {
+                      alert("Erro ao criar categoria");
+                      return;
+                    }
+
+                    const categoriaCriada = await res.json();
+
+                    setCategorias((prev) => [...prev, categoriaCriada]);
+                    setCategoriaSelecionada(categoriaCriada.id);
+
+                    setNovaCategoria("");
+                    setCriandoCategoria(false);
+                  }}
+                  className="rounded-md bg-brand px-4 py-2 text-sm font-semibold text-on-brand"
+                >
+                  Salvar
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCriandoCategoria(false);
+                    setNovaCategoria("");
+                  }}
+                  className="text-sm font-medium text-admin-muted hover:underline"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          )}
         </Field>
 
         <Field label="Data de início">
@@ -111,7 +173,6 @@ export default function InformacoesBasicas({
         </Field>
       </div>
 
-      {/* ⭐ DESTAQUE */}
       <div className="pt-2">
         <label className="flex items-center gap-3 text-sm font-medium text-admin">
           <input

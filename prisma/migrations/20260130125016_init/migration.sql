@@ -1,7 +1,4 @@
 -- CreateEnum
-CREATE TYPE "StatusPacote" AS ENUM ('RASCUNHO', 'PUBLICADO', 'ESGOTADO', 'CANCELADO');
-
--- CreateEnum
 CREATE TYPE "TipoFoto" AS ENUM ('CAPA', 'GALERIA', 'DESTAQUE', 'BANNER');
 
 -- CreateTable
@@ -39,7 +36,6 @@ CREATE TABLE "pacotes" (
     "texto_destaque" TEXT,
     "resumo" TEXT,
     "descricao" TEXT,
-    "status" "StatusPacote" NOT NULL DEFAULT 'RASCUNHO',
     "destaque" BOOLEAN NOT NULL DEFAULT false,
     "categoria_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -8,13 +8,6 @@ datasource db {
   provider = "postgresql"
 }
 
-enum StatusPacote {
-  RASCUNHO
-  PUBLICADO
-  ESGOTADO
-  CANCELADO
-}
-
 enum TipoFoto {
   CAPA
   GALERIA
@@ -62,8 +55,7 @@ model Pacote {
   resumo         String?
   descricao      String?
 
-  status         StatusPacote @default(RASCUNHO)
-  destaque       Boolean      @default(false)
+  destaque       Boolean      @default(false) @@unique
 
   categoria_id   Int
 

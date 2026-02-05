@@ -17,7 +17,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Script oficial do Instagram */}
       <script async src="https://www.instagram.com/embed.js"></script>
     </section>
   );

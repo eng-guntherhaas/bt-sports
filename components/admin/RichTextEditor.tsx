@@ -68,9 +68,7 @@ export default function RichTextEditor({ value, onChange }: Props) {
         focus-within:ring-brand/30
       "
     >
-      {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-1 border-b border-brand/20 bg-surface px-2 py-1">
-        {/* Negrito */}
         <button
           type="button"
           title="Negrito"
@@ -81,8 +79,6 @@ export default function RichTextEditor({ value, onChange }: Props) {
         >
           <span className="font-extrabold">B</span>
         </button>
-
-        {/* Itálico */}
         <button
           type="button"
           title="Itálico"
@@ -96,7 +92,6 @@ export default function RichTextEditor({ value, onChange }: Props) {
 
         <div className="mx-1 h-5 w-px bg-brand/30" />
 
-        {/* Título */}
         <button
           type="button"
           title="Título"
@@ -114,7 +109,6 @@ export default function RichTextEditor({ value, onChange }: Props) {
 
         <div className="mx-1 h-5 w-px bg-brand/30" />
 
-        {/* Lista */}
         <button
           type="button"
           title="Lista com marcadores"
@@ -126,7 +120,6 @@ export default function RichTextEditor({ value, onChange }: Props) {
           • Lista
         </button>
 
-        {/* Lista numerada */}
         <button
           type="button"
           title="Lista numerada"
@@ -140,7 +133,6 @@ export default function RichTextEditor({ value, onChange }: Props) {
 
         <div className="mx-1 h-5 w-px bg-brand/30" />
 
-        {/* Upload de imagem */}
         <button
           type="button"
           title="Inserir imagem"
@@ -162,7 +154,6 @@ export default function RichTextEditor({ value, onChange }: Props) {
         />
       </div>
 
-      {/* Área editável */}
       <EditorContent
         editor={editor}
         className="

@@ -55,13 +55,13 @@ export default async function PacotePage({ params }: Props) {
               </h1>
 
               {pacote.texto_destaque && (
-                <p className="text-lg font-medium text-brand">
+                <p className="text-lg font-medium text-brand line-clamp-2">
                   {pacote.texto_destaque}
                 </p>
               )}
 
               {pacote.resumo && (
-                <p className="text-sm leading-relaxed text-on-surface-muted">
+                <p className="text-sm leading-relaxed text-on-surface-muted line-clamp-3">
                   {pacote.resumo}
                 </p>
               )}

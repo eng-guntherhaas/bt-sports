@@ -36,10 +36,9 @@ export default async function AdminPacotes({
       </div>
 
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(260px,1fr))]">
-        {/* Novo pacote */}
         <Link
           href="/admin/pacotes/novo"
-          className="group relative aspect-[4/3] rounded-xl border-2 border-dashed border-border-muted bg-surface transition sm:hover:-translate-y-0.5 sm:hover:shadow-lg"
+          className="group relative aspect-4/3 rounded-xl border-2 border-dashed border-border-muted bg-surface transition sm:hover:-translate-y-0.5 sm:hover:shadow-lg"
         >
           <div className="flex h-full items-center justify-center">
             <span className="text-5xl font-light text-admin-muted group-hover:text-brand">

@@ -12,7 +12,7 @@ export const stats = [
 type Parceiro = {
   name: string;
   href: string;
-  imgMobile?: string; // mobile first
+  imgMobile?: string;
   imgDesktop: string;
 };
 

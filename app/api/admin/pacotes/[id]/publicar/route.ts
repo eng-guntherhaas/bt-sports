@@ -14,10 +14,6 @@ export async function PATCH(
 
   const { status } = await req.json();
 
-  if (!["PUBLICADO", "RASCUNHO"].includes(status)) {
-    return NextResponse.json({ error: "Status inválido" }, { status: 400 });
-  }
-
   await prisma.pacote.update({
     where: { id: pacoteId },
     data: { status },
