@@ -47,8 +47,6 @@ export default function EditarPacoteClient({
   const [fotoBanner, setFotoBanner] = useState<File | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
     try {
       setLoading(true);
       setLoadingMessage("Salvando alterações...");
@@ -74,6 +72,7 @@ export default function EditarPacoteClient({
       });
 
       if (!res.ok) {
+        setLoading(false);
         throw new Error("Erro ao atualizar pacote");
       }
 

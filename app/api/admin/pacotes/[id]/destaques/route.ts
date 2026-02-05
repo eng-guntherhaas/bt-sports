@@ -3,20 +3,29 @@ import { NextResponse } from "next/server";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id?: string }> }
 ) {
-  const { destaque } = await req.json();
+  const { id } = await context.params;
+  const pacoteId = Number(id);
 
-  if (destaque) {
-    await prisma.pacote.updateMany({
-      where: { destaque: true },
-      data: { destaque: false },
-    });
+  if (!id || Number.isNaN(pacoteId)) {
+    return NextResponse.json({ error: "ID inválido" }, { status: 400 });
   }
 
-  await prisma.pacote.update({
-    where: { id: Number(params.id) },
-    data: { destaque },
+  const { destaque } = await req.json();
+
+  await prisma.$transaction(async (tx) => {
+    if (destaque) {
+      await tx.pacote.updateMany({
+        where: { destaque: true },
+        data: { destaque: false },
+      });
+    }
+
+    await tx.pacote.update({
+      where: { id: pacoteId },
+      data: { destaque },
+    });
   });
 
   return NextResponse.json({ success: true });
