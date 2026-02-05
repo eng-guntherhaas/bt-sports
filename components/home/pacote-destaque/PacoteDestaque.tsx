@@ -25,7 +25,15 @@ export default function PacoteDestaque({
           focus:outline-none focus:ring-2 focus:ring-brand/40
         "
       >
-        <div className="relative aspect-21/9 w-full bg-surface-muted">
+        <div
+          className="
+    relative w-full
+    h-[45vh]
+    min-h-65
+    max-h-130
+    bg-surface-muted
+  "
+        >
           {bannerUrl && (
             <Image
               src={bannerUrl}
@@ -34,10 +42,11 @@ export default function PacoteDestaque({
               priority
               sizes="100vw"
               className="
-                object-cover
-                transition-transform duration-700 ease-out
-                group-hover:scale-[1.04]
-              "
+    object-cover
+    object-center
+    transition-transform duration-700 ease-out
+    group-hover:scale-[1.04]
+  "
             />
           )}
 

@@ -45,7 +45,7 @@ export default function ConteudoPacote({
         <p
           className={`mt-1 text-xs ${
             destaqueCount > MAX_DESTAQUE * 0.9
-              ? "text-red-500"
+              ? "text-danger"
               : "text-admin-muted"
           }`}
         >

@@ -5,6 +5,7 @@ import InformacoesBasicas from "@/components/pacotes/novos/InformacoesBasicas";
 import ImagensPacote from "@/components/pacotes/novos/ImagensPacote";
 import ConteudoPacote from "@/components/pacotes/novos/ConteudoPacote";
 import StickyActions from "@/components/pacotes/novos/StickyActions";
+import { toast } from "sonner";
 
 type Categoria = {
   id: number;
@@ -32,7 +33,7 @@ export default function NovoPacotePage() {
     fetch("/api/admin/categorias-viagem")
       .then((r) => r.json())
       .then(setCategorias)
-      .catch(() => alert("Erro ao carregar categorias"));
+      .catch(() => toast.error("Erro ao carregar categorias"));
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -86,7 +87,7 @@ export default function NovoPacotePage() {
 
       window.location.href = `/admin/pacotes/${pacote.id}`;
     } catch (err) {
-      alert("Erro ao salvar pacote");
+      toast.error("Erro ao salvar pacote");
       console.error(err);
     } finally {
       setLoading(false);

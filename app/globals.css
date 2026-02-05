@@ -25,6 +25,7 @@ Base Design Tokens
     /* ================= Border ================= */
     --color-border: #e2e8f0;
     --color-border-muted: #cbd5e1;
+    --color-border-black: #000000;
 
     /* ================= Status ================= */
     --color-success: #22c55e;
@@ -227,6 +228,6 @@ Admin (Área Restrita)
   }
 
   .text-danger-hover:hover {
-    color: #dc2626; /* vermelho um pouco mais forte */
+    color: #dc2626;
   }
 }

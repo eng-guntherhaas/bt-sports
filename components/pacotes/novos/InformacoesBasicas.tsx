@@ -1,6 +1,7 @@
 import Section from "./Section";
 import Field from "./Field";
 import React from "react";
+import { toast } from "sonner";
 
 const inputBase =
   "mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default text-admin focus-ring-brand";
@@ -107,7 +108,7 @@ export default function InformacoesBasicas({
                     });
 
                     if (!res.ok) {
-                      alert("Erro ao criar categoria");
+                      toast.error("Erro ao criar categoria");
                       return;
                     }
 

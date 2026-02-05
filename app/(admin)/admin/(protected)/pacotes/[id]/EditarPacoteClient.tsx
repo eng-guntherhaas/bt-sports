@@ -1,33 +1,38 @@
 "use client";
 
-import { useState } from "react";
-import { toast } from "sonner";
+type Categoria = {
+  id: number;
+  nome: string;
+};
 
+type PacoteEditavel = {
+  id: number;
+  nome: string;
+  categoria_id: number;
+  data_inicio: string;
+  preco: number;
+  texto_destaque: string;
+  resumo: string;
+  descricao: string;
+  destaque: boolean;
+
+  capaUrl?: string;
+  destaqueUrl?: string;
+  bannerUrl?: string;
+};
+
+type EditarPacoteClientProps = {
+  pacote: PacoteEditavel;
+  categorias: Categoria[];
+};
+
+import { useState } from "react";
 import InformacoesBasicas from "@/components/pacotes/novos/InformacoesBasicas";
 import ImagensPacote from "@/components/pacotes/novos/ImagensPacote";
 import ConteudoPacote from "@/components/pacotes/novos/ConteudoPacote";
 import StickyActions from "@/components/pacotes/novos/StickyActions";
-
-type EditarPacoteClientProps = {
-  pacote: {
-    id: number;
-    nome: string;
-    categoria_id: number;
-    data_inicio: string;
-    preco: number;
-    texto_destaque: string;
-    resumo: string;
-    descricao: string;
-    destaque: boolean;
-    capaUrl?: string;
-    destaqueUrl?: string;
-    bannerUrl?: string;
-  };
-  categorias: {
-    id: number;
-    nome: string;
-  }[];
-};
+import ConfirmModal from "@/components/ui/ConfirmModal";
+import { toast } from "sonner";
 
 export default function EditarPacoteClient({
   pacote,
@@ -46,24 +51,29 @@ export default function EditarPacoteClient({
   const [fotoDestaque, setFotoDestaque] = useState<File | null>(null);
   const [fotoBanner, setFotoBanner] = useState<File | null>(null);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const payload = {
+      nome: formData.get("nome"),
+      categoria_id: categoriaSelecionada,
+      data_inicio: formData.get("data_inicio") || null,
+      preco: Number(formData.get("preco")),
+      resumo: formData.get("resumo") || null,
+      texto_destaque: formData.get("texto_destaque") || null,
+      descricao,
+      destaque: formData.get("destaque") === "on",
+    };
+
     try {
       setLoading(true);
       setLoadingMessage("Salvando alterações...");
-
-      const form = e.currentTarget;
-      const formData = new FormData(form);
-
-      const payload = {
-        nome: formData.get("nome"),
-        categoria_id: categoriaSelecionada,
-        data_inicio: formData.get("data_inicio") || null,
-        preco: Number(formData.get("preco")),
-        resumo: formData.get("resumo") || null,
-        texto_destaque: formData.get("texto_destaque") || null,
-        descricao,
-        destaque: formData.get("destaque") === "on",
-      };
 
       const res = await fetch(`/api/admin/pacotes/${pacote.id}`, {
         method: "PATCH",
@@ -71,33 +81,31 @@ export default function EditarPacoteClient({
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) {
-        setLoading(false);
-        throw new Error("Erro ao atualizar pacote");
-      }
-
-      async function uploadImagem(file: File, tipo: string) {
-        const fd = new FormData();
-        fd.append("file", file);
-        fd.append("tipo", tipo);
-        fd.append("pacoteId", pacote.id.toString());
-
-        await fetch("/api/admin/pacotes/upload", {
-          method: "POST",
-          body: fd,
-        });
-      }
-
-      setLoadingMessage("Atualizando imagens...");
-
-      if (fotoCapa) await uploadImagem(fotoCapa, "CAPA");
-      if (fotoDestaque) await uploadImagem(fotoDestaque, "DESTAQUE");
-      if (fotoBanner) await uploadImagem(fotoBanner, "BANNER");
-
-      toast.success("Pacote atualizado com sucesso ✨");
-    } catch (error) {
-      console.error(error);
+      if (!res.ok) throw new Error("Erro ao atualizar pacote");
+    } catch (err) {
       toast.error("Erro ao salvar alterações");
+      console.error(err);
+    } finally {
+      setLoading(false);
+      setLoadingMessage("");
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      setLoading(true);
+      setLoadingMessage("Excluindo pacote...");
+
+      const res = await fetch(`/api/admin/pacotes/${pacote.id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("Erro ao excluir pacote");
+
+      window.location.href = "/admin/pacotes";
+    } catch (err) {
+      toast.error("Erro ao excluir pacote");
+      console.error(err);
     } finally {
       setLoading(false);
       setLoadingMessage("");
@@ -106,8 +114,8 @@ export default function EditarPacoteClient({
 
   return (
     <div className="bg-admin min-h-screen">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6 sm:py-10 space-y-6 sm:space-y-8">
-        <h1 className="text-xl sm:text-2xl font-semibold text-admin">
+      <div className="mx-auto max-w-5xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
+        <h1 className="text-xl font-semibold text-admin sm:text-2xl">
           Editar pacote
         </h1>
 
@@ -153,10 +161,34 @@ export default function EditarPacoteClient({
           <StickyActions
             loading={loading}
             loadingMessage={loadingMessage}
-            onCancel={() => history.back()}
+            onCancel={() => setShowCancelModal(true)}
+            onDelete={() => setShowDeleteModal(true)}
           />
         </form>
       </div>
+
+      <ConfirmModal
+        open={showCancelModal}
+        title="Cancelar edição?"
+        description="As alterações não salvas serão perdidas."
+        confirmLabel="Sim, cancelar"
+        onCancel={() => setShowCancelModal(false)}
+        onConfirm={() => {
+          setShowCancelModal(false);
+          history.back();
+        }}
+      />
+
+      <ConfirmModal
+        open={showDeleteModal}
+        title="Excluir pacote?"
+        description="Essa ação é permanente e não pode ser desfeita."
+        confirmLabel="Sim, excluir"
+        danger
+        loading={loading}
+        onCancel={() => setShowDeleteModal(false)}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }

@@ -70,3 +70,56 @@ export async function PATCH(
     );
   }
 }
+
+export async function DELETE(
+  _req: Request,
+  context: { params: Promise<{ id?: string }> }
+) {
+  try {
+    const { id } = await context.params;
+    const pacoteId = Number(id);
+
+    if (!id || Number.isNaN(pacoteId)) {
+      return NextResponse.json({ error: "ID inválido" }, { status: 400 });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      const pacote = await tx.pacote.findUnique({
+        where: { id: pacoteId },
+        select: { destaque: true },
+      });
+
+      if (!pacote) {
+        throw new Error("Pacote não encontrado");
+      }
+
+      await tx.pacote.delete({
+        where: { id: pacoteId },
+      });
+
+      if (pacote.destaque) {
+        const novoDestaque = await tx.pacote.findFirst({
+          orderBy: {
+            created_at: "desc",
+          },
+        });
+
+        if (novoDestaque) {
+          await tx.pacote.update({
+            where: { id: novoDestaque.id },
+            data: { destaque: true },
+          });
+        }
+      }
+    });
+
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("DELETE /api/admin/pacotes/[id]", error);
+
+    return NextResponse.json(
+      { error: "Erro ao excluir pacote" },
+      { status: 500 }
+    );
+  }
+}
