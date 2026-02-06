@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { TipoFoto } from "@/generated/prisma";
+import { formatarDataLonga } from "@/lib/formatarData";
 
 type Props = {
   params: { slug?: string };
@@ -53,6 +54,12 @@ export default async function PacotePage({ params }: Props) {
               <h1 className="text-3xl font-bold tracking-tight text-on-surface">
                 {pacote.nome}
               </h1>
+
+              {pacote.data_inicio && (
+                <p className="text-sm font-medium text-on-surface-muted">
+                  {formatarDataLonga(pacote.data_inicio)}
+                </p>
+              )}
 
               {pacote.texto_destaque && (
                 <p className="text-lg font-medium text-brand line-clamp-2">

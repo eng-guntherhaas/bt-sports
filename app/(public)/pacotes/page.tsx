@@ -17,6 +17,7 @@ export default async function PacotesPublicos({
     params.order === "preco-desc"
       ? params.order
       : "nome";
+
   const pacotes = await getPacotesUi(order);
 
   return (

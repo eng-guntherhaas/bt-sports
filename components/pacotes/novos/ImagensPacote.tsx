@@ -4,25 +4,25 @@ import UploadImagem from "@/components/admin/UploadImagem";
 type ImagensPacoteProps = {
   fotoCapa: File | null;
   setFotoCapa: (file: File | null) => void;
-  fotoDestaque: File | null;
-  setFotoDestaque: (file: File | null) => void;
+  fotoCard: File | null;
+  setFotoCard: (file: File | null) => void;
   fotoBanner: File | null;
   setFotoBanner: (file: File | null) => void;
 
   capaAtualUrl?: string;
-  destaqueAtualUrl?: string;
+  cardAtualUrl?: string;
   bannerAtualUrl?: string;
 };
 
 export default function ImagensPacote({
   fotoCapa,
   setFotoCapa,
-  fotoDestaque,
-  setFotoDestaque,
+  fotoCard,
+  setFotoCard,
   fotoBanner,
   setFotoBanner,
   capaAtualUrl,
-  destaqueAtualUrl,
+  cardAtualUrl,
   bannerAtualUrl,
 }: ImagensPacoteProps) {
   return (
@@ -37,9 +37,9 @@ export default function ImagensPacote({
 
       <UploadImagem
         label="Imagem de destaque (4:3)"
-        value={fotoDestaque}
-        onChange={setFotoDestaque}
-        imagemAtualUrl={destaqueAtualUrl}
+        value={fotoCard}
+        onChange={setFotoCard}
+        imagemAtualUrl={cardAtualUrl}
         aspect="4:3"
       />
 

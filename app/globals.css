@@ -125,7 +125,7 @@ Utilities (Design System)
     color: var(--color-text);
   }
 
-  .text-surface-hover:hover {
+  .text-on-brand-hover:hover {
     color: var(--color-text-on-brand);
   }
 

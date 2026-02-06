@@ -1,6 +1,7 @@
 import { TipoFoto } from "@/generated/prisma";
 import { prisma } from "@/lib/prisma";
 import { pacotesMock } from "@/mocks/pacotes";
+import { formatarDataCurta } from "@/lib/formatarData";
 
 export async function getPacotesRecentes(limit = 6) {
   try {
@@ -26,9 +27,7 @@ export async function getPacotesRecentes(limit = 6) {
       nome: pacote.nome,
       resumo: pacote.resumo,
       preco: pacote.preco ? Number(pacote.preco) : undefined,
-      dataEvento: pacote.data_inicio
-        ? pacote.data_inicio.toISOString().split("T")[0]
-        : undefined,
+      dataEvento: formatarDataCurta(pacote.data_inicio),
       imageUrl: pacote.fotos[0]?.url,
       href: `/pacotes/${pacote.slug}`,
     }));

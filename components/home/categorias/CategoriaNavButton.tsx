@@ -20,6 +20,7 @@ export default function CategoriaNavButton({ id, direction }: Props) {
         text-brand text-3xl
         transition
         bg-brand-hover
+        text-on-brand-hover
         border-brand-hover
       "
     >

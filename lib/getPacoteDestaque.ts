@@ -20,6 +20,7 @@ export async function getPacoteDestaque() {
     resumo: pacote.resumo,
     preco: pacote.preco ? Number(pacote.preco) : undefined,
     imageUrl: pacote.fotos[0]?.url,
+    dataInicio: pacote.data_inicio,
     href: `/pacotes/${pacote.slug}`,
     slug: pacote.slug,
   };

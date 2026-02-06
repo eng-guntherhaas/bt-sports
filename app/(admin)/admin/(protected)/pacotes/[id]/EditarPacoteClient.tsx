@@ -15,9 +15,8 @@ type PacoteEditavel = {
   resumo: string;
   descricao: string;
   destaque: boolean;
-
   capaUrl?: string;
-  destaqueUrl?: string;
+  cardUrl?: string;
   bannerUrl?: string;
 };
 
@@ -33,6 +32,7 @@ import ConteudoPacote from "@/components/pacotes/novos/ConteudoPacote";
 import StickyActions from "@/components/pacotes/novos/StickyActions";
 import ConfirmModal from "@/components/ui/ConfirmModal";
 import { toast } from "sonner";
+import { set } from "zod";
 
 export default function EditarPacoteClient({
   pacote,
@@ -48,7 +48,7 @@ export default function EditarPacoteClient({
   const [descricao, setDescricao] = useState(pacote.descricao);
 
   const [fotoCapa, setFotoCapa] = useState<File | null>(null);
-  const [fotoDestaque, setFotoDestaque] = useState<File | null>(null);
+  const [fotoCard, setFotoCard] = useState<File | null>(null);
   const [fotoBanner, setFotoBanner] = useState<File | null>(null);
 
   const [showCancelModal, setShowCancelModal] = useState(false);
@@ -140,12 +140,12 @@ export default function EditarPacoteClient({
           <ImagensPacote
             fotoCapa={fotoCapa}
             setFotoCapa={setFotoCapa}
-            fotoDestaque={fotoDestaque}
-            setFotoDestaque={setFotoDestaque}
+            fotoCard={fotoCard}
+            setFotoCard={setFotoCard}
             fotoBanner={fotoBanner}
             setFotoBanner={setFotoBanner}
             capaAtualUrl={pacote.capaUrl}
-            destaqueAtualUrl={pacote.destaqueUrl}
+            cardAtualUrl={pacote.cardUrl}
             bannerAtualUrl={pacote.bannerUrl}
           />
 

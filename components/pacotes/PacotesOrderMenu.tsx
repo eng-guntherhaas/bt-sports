@@ -66,7 +66,7 @@ export default function PacotesOrderMenu({
 
           ${baseButton}
           bg-brand-hover
-          text-surface-hover
+          text-on-brand-hover
           focus-ring-brand
         `}
       >

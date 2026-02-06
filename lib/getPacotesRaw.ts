@@ -4,9 +4,9 @@ import { pacotesMock } from "@/mocks/pacotes";
 export type PacoteRaw = {
   id: number | string;
   nome: string;
-  resumo?: string | null;
-  preco?: number | { toNumber(): number } | null;
-  data_inicio?: Date | string | null;
+  resumo?: string;
+  preco?: number | { toNumber(): number };
+  data_inicio?: Date | string;
   slug?: string;
   imageUrl?: string;
   fotos?: {

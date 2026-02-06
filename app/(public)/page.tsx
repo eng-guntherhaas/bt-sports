@@ -1,6 +1,7 @@
 import { getCategoriasHome } from "@/lib/getCategoriasHome";
 import { getPacotesRecentes } from "@/lib/getPacotesRecentes";
 import { getPacoteDestaque } from "@/lib/getPacoteDestaque";
+import { formatarDataLonga } from "@/lib/formatarData";
 
 import CategoriasCarousel from "@/components/home/categorias/CategoriasCarousel";
 import PacotesRecentes from "@/components/home/pacotes-recentes/PacotesRecentes";
@@ -18,6 +19,7 @@ export default async function Home() {
           slug={destaque.slug}
           nome={destaque.nome}
           preco={destaque.preco}
+          dataEvento={formatarDataLonga(destaque.dataInicio)}
           bannerUrl={destaque.imageUrl}
         />
       )}

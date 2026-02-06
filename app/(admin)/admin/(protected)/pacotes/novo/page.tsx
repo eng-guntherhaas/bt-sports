@@ -6,6 +6,7 @@ import ImagensPacote from "@/components/pacotes/novos/ImagensPacote";
 import ConteudoPacote from "@/components/pacotes/novos/ConteudoPacote";
 import StickyActions from "@/components/pacotes/novos/StickyActions";
 import { toast } from "sonner";
+import { set } from "zod";
 
 type Categoria = {
   id: number;
@@ -25,7 +26,7 @@ export default function NovoPacotePage() {
 
   const [fotoCapa, setFotoCapa] = useState<File | null>(null);
   const [fotoBanner, setFotoBanner] = useState<File | null>(null);
-  const [fotoDestaque, setFotoDestaque] = useState<File | null>(null);
+  const [fotoCard, setFotoCard] = useState<File | null>(null);
 
   const [descricao, setDescricao] = useState("");
 
@@ -82,7 +83,7 @@ export default function NovoPacotePage() {
       setLoadingMessage("Enviando imagens...");
 
       if (fotoCapa) await uploadImagem(fotoCapa, "CAPA");
-      if (fotoDestaque) await uploadImagem(fotoDestaque, "DESTAQUE");
+      if (fotoCard) await uploadImagem(fotoCard, "CARD");
       if (fotoBanner) await uploadImagem(fotoBanner, "BANNER");
 
       window.location.href = `/admin/pacotes/${pacote.id}`;
@@ -116,8 +117,8 @@ export default function NovoPacotePage() {
           <ImagensPacote
             fotoCapa={fotoCapa}
             setFotoCapa={setFotoCapa}
-            fotoDestaque={fotoDestaque}
-            setFotoDestaque={setFotoDestaque}
+            fotoCard={fotoCard}
+            setFotoCard={setFotoCard}
             fotoBanner={fotoBanner}
             setFotoBanner={setFotoBanner}
           />

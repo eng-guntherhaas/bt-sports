@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { pacotesMock } from "@/mocks/pacotes";
+import { formatarDataCurta } from "@/lib/formatarData";
 
 export type Order = "nome" | "data" | "preco-asc" | "preco-desc";
 
@@ -26,7 +27,7 @@ export async function getPacotesUi(order: Order) {
     orderBy,
     include: {
       fotos: {
-        where: { tipo: "CAPA" },
+        where: { tipo: "CARD" },
         take: 1,
       },
     },
@@ -61,6 +62,7 @@ export async function getPacotesUi(order: Order) {
     nome: p.nome,
     resumo: p.resumo ?? "",
     preco: Number(p.preco ?? 0),
+    dataEvento: formatarDataCurta(p.data_inicio),
     imageUrl: p.fotos[0]?.url,
     href: `/pacotes/${p.slug}`,
   }));

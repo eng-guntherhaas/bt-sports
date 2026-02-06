@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "TipoFoto" AS ENUM ('CAPA', 'GALERIA', 'DESTAQUE', 'BANNER');
+CREATE TYPE "TipoFoto" AS ENUM ('CAPA', 'GALERIA', 'CARD', 'BANNER');
 
 -- CreateTable
 CREATE TABLE "contatos" (

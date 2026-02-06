@@ -7,6 +7,7 @@ type Props = {
   slug: string;
   nome: string;
   preco?: number;
+  dataEvento?: string;
   bannerUrl: string;
 };
 
@@ -14,6 +15,7 @@ export default function PacoteDestaque({
   slug,
   nome,
   preco,
+  dataEvento,
   bannerUrl,
 }: Props) {
   return (
@@ -65,6 +67,11 @@ export default function PacoteDestaque({
 
         <div className="absolute inset-0 flex items-end">
           <div className="mx-auto w-full max-w-7xl px-6 pb-6 sm:px-10 sm:pb-10">
+            {dataEvento && (
+              <span className="text-sm font-medium text-on-brand/80">
+                {dataEvento}
+              </span>
+            )}
             <div className="max-w-3xl space-y-3">
               <h2
                 className="

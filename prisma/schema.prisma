@@ -11,7 +11,7 @@ datasource db {
 enum TipoFoto {
   CAPA
   GALERIA
-  DESTAQUE
+  CARD
   BANNER
 }
 
@@ -55,7 +55,7 @@ model Pacote {
   resumo         String?
   descricao      String?
 
-  destaque       Boolean      @default(false) @@unique
+  destaque       Boolean      @default(false) @unique
 
   categoria_id   Int
 
@@ -69,7 +69,6 @@ model Pacote {
   depoimentos Depoimento[]
 
   @@index([categoria_id])
-  @@index([status])
   @@index([destaque])
   @@index([data_inicio])
   @@map("pacotes")
