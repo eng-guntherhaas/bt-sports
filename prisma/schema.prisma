@@ -55,7 +55,7 @@ model Pacote {
   resumo         String?
   descricao      String?
 
-  destaque       Boolean      @default(false) @unique
+  destaque       Boolean      @default(false)
 
   categoria_id   Int
 

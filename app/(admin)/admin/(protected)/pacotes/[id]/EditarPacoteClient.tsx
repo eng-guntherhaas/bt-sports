@@ -1,5 +1,14 @@
 "use client";
 
+import { useState } from "react";
+import InformacoesBasicas from "@/components/pacotes/novos/InformacoesBasicas";
+import ConteudoPacote from "@/components/pacotes/novos/ConteudoPacote";
+import StickyActions from "@/components/pacotes/novos/StickyActions";
+import ConfirmModal from "@/components/ui/ConfirmModal";
+import PacoteView from "@/components/pacotes/PacoteView";
+import { toast } from "sonner";
+import { PacoteFormState } from "@/types/pacoteForm";
+
 type Categoria = {
   id: number;
   nome: string;
@@ -11,65 +20,53 @@ type PacoteEditavel = {
   categoria_id: number;
   data_inicio: string;
   preco: number;
+  moeda?: string;
   texto_destaque: string;
   resumo: string;
   descricao: string;
   destaque: boolean;
   capaUrl?: string;
-  cardUrl?: string;
-  bannerUrl?: string;
 };
 
-type EditarPacoteClientProps = {
+type Props = {
   pacote: PacoteEditavel;
   categorias: Categoria[];
 };
 
-import { useState } from "react";
-import InformacoesBasicas from "@/components/pacotes/novos/InformacoesBasicas";
-import ImagensPacote from "@/components/pacotes/novos/ImagensPacote";
-import ConteudoPacote from "@/components/pacotes/novos/ConteudoPacote";
-import StickyActions from "@/components/pacotes/novos/StickyActions";
-import ConfirmModal from "@/components/ui/ConfirmModal";
-import { toast } from "sonner";
-import { set } from "zod";
-
-export default function EditarPacoteClient({
-  pacote,
-  categorias,
-}: EditarPacoteClientProps) {
+export default function EditarPacoteClient({ pacote, categorias }: Props) {
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
 
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState<number | "">(
-    pacote.categoria_id
-  );
+  const [formData, setFormData] = useState<PacoteFormState>({
+    nome: pacote.nome,
+    categoria_id: pacote.categoria_id,
+    data_inicio: pacote.data_inicio,
+    preco: pacote.preco,
+    moeda: pacote.moeda ?? "EUR",
+    texto_destaque: pacote.texto_destaque,
+    resumo: pacote.resumo,
+    descricao: pacote.descricao,
+    destaque: pacote.destaque,
+  });
 
-  const [descricao, setDescricao] = useState(pacote.descricao);
-
-  const [fotoCapa, setFotoCapa] = useState<File | null>(null);
-  const [fotoCard, setFotoCard] = useState<File | null>(null);
-  const [fotoBanner, setFotoBanner] = useState<File | null>(null);
+  const [listaCategorias, setListaCategorias] =
+    useState<Categoria[]>(categorias);
 
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  function updateField<K extends keyof PacoteFormState>(
+    key: K,
+    value: PacoteFormState[K]
+  ) {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
-    const form = e.target as HTMLFormElement;
-    const formData = new FormData(form);
-
-    const payload = {
-      nome: formData.get("nome"),
-      categoria_id: categoriaSelecionada,
-      data_inicio: formData.get("data_inicio") || null,
-      preco: Number(formData.get("preco")),
-      resumo: formData.get("resumo") || null,
-      texto_destaque: formData.get("texto_destaque") || null,
-      descricao,
-      destaque: formData.get("destaque") === "on",
-    };
 
     try {
       setLoading(true);
@@ -78,10 +75,12 @@ export default function EditarPacoteClient({
       const res = await fetch(`/api/admin/pacotes/${pacote.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formData),
       });
 
       if (!res.ok) throw new Error("Erro ao atualizar pacote");
+
+      toast.success("Pacote atualizado");
     } catch (err) {
       toast.error("Erro ao salvar alterações");
       console.error(err);
@@ -112,50 +111,59 @@ export default function EditarPacoteClient({
     }
   }
 
+  const categoriaAtual = listaCategorias.find(
+    (c) => c.id === formData.categoria_id
+  );
+
   return (
     <div className="bg-admin min-h-screen">
-      <div className="mx-auto max-w-5xl space-y-6 px-4 py-6 sm:px-6 sm:py-10">
+      <div className="mx-auto max-w-7xl space-y-10 px-4 py-6 sm:px-6 sm:py-10">
         <h1 className="text-xl font-semibold text-admin sm:text-2xl">
           Editar pacote
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
-          <InformacoesBasicas
-            categorias={categorias}
-            setCategorias={() => {}}
-            categoriaSelecionada={categoriaSelecionada}
-            setCategoriaSelecionada={setCategoriaSelecionada}
-            criandoCategoria={false}
-            setCriandoCategoria={() => {}}
-            novaCategoria=""
-            setNovaCategoria={() => {}}
-            valoresIniciais={{
-              nome: pacote.nome,
-              data_inicio: pacote.data_inicio,
-              preco: pacote.preco,
-              destaque: pacote.destaque,
-            }}
+        {/* PREVIEW */}
+        <div className="rounded-xl border border-default overflow-hidden">
+          <PacoteView
+            nome={formData.nome}
+            categoria={
+              categoriaAtual ? { nome: categoriaAtual.nome } : undefined
+            }
+            data_inicio={
+              formData.data_inicio ? new Date(formData.data_inicio) : undefined
+            }
+            texto_destaque={formData.texto_destaque}
+            resumo={formData.resumo}
+            descricao={formData.descricao}
+            preco={formData.preco}
+            capaUrl={pacote.capaUrl}
           />
+        </div>
 
-          <ImagensPacote
-            fotoCapa={fotoCapa}
-            setFotoCapa={setFotoCapa}
-            fotoCard={fotoCard}
-            setFotoCard={setFotoCard}
-            fotoBanner={fotoBanner}
-            setFotoBanner={setFotoBanner}
-            capaAtualUrl={pacote.capaUrl}
-            cardAtualUrl={pacote.cardUrl}
-            bannerAtualUrl={pacote.bannerUrl}
+        {/* FORM */}
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <InformacoesBasicas
+            categorias={listaCategorias}
+            setCategorias={setListaCategorias}
+            categoriaSelecionada={formData.categoria_id}
+            onCategoriaChange={(value) => updateField("categoria_id", value)}
+            valores={{
+              nome: formData.nome,
+              data_inicio: formData.data_inicio,
+              preco: formData.preco,
+              moeda: formData.moeda,
+              destaque: formData.destaque,
+            }}
+            onChange={updateField}
           />
 
           <ConteudoPacote
-            descricao={descricao}
-            setDescricao={setDescricao}
-            valoresIniciais={{
-              texto_destaque: pacote.texto_destaque,
-              resumo: pacote.resumo,
+            valores={{
+              texto_destaque: formData.texto_destaque,
+              resumo: formData.resumo,
+              descricao: formData.descricao,
             }}
+            onChange={updateField}
           />
 
           <StickyActions
@@ -182,7 +190,7 @@ export default function EditarPacoteClient({
       <ConfirmModal
         open={showDeleteModal}
         title="Excluir pacote?"
-        description="Essa ação é permanente e não pode ser desfeita."
+        description="Essa ação é permanente."
         confirmLabel="Sim, excluir"
         danger
         loading={loading}

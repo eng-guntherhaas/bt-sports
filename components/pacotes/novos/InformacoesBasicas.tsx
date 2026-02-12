@@ -1,7 +1,10 @@
+"use client";
+
 import Section from "./Section";
 import Field from "./Field";
 import React from "react";
 import { toast } from "sonner";
+import { PacoteFormState } from "@/types/pacoteForm";
 
 const inputBase =
   "mt-2 w-full rounded-md bg-surface px-3.5 py-2 border border-default text-admin focus-ring-brand";
@@ -11,39 +14,35 @@ type Categoria = {
   nome: string;
 };
 
-type InformacoesBasicasProps = {
+type Props = {
   categorias: Categoria[];
   setCategorias: React.Dispatch<React.SetStateAction<Categoria[]>>;
 
   categoriaSelecionada: number | "";
-  setCategoriaSelecionada: (value: number | "") => void;
+  onCategoriaChange: (value: number | "") => void;
 
-  criandoCategoria: boolean;
-  setCriandoCategoria: (value: boolean) => void;
+  valores: Pick<
+    PacoteFormState,
+    "nome" | "data_inicio" | "preco" | "moeda" | "destaque"
+  >;
 
-  novaCategoria: string;
-  setNovaCategoria: (value: string) => void;
-
-  valoresIniciais?: {
-    nome?: string;
-    data_inicio?: string;
-    preco?: number;
-    moeda?: string;
-    destaque?: boolean;
-  };
+  onChange: <K extends keyof PacoteFormState>(
+    key: K,
+    value: PacoteFormState[K]
+  ) => void;
 };
 
 export default function InformacoesBasicas({
   categorias,
   setCategorias,
   categoriaSelecionada,
-  setCategoriaSelecionada,
-  criandoCategoria,
-  setCriandoCategoria,
-  novaCategoria,
-  setNovaCategoria,
-  valoresIniciais,
-}: InformacoesBasicasProps) {
+  onCategoriaChange,
+  valores,
+  onChange,
+}: Props) {
+  const [criandoCategoria, setCriandoCategoria] = React.useState(false);
+  const [novaCategoria, setNovaCategoria] = React.useState("");
+
   return (
     <Section
       title="Informações básicas"
@@ -51,9 +50,8 @@ export default function InformacoesBasicas({
     >
       <Field label="Nome do pacote" required>
         <input
-          name="nome"
-          required
-          defaultValue={valoresIniciais?.nome}
+          value={valores.nome}
+          onChange={(e) => onChange("nome", e.target.value)}
           className={inputBase}
         />
       </Field>
@@ -61,29 +59,33 @@ export default function InformacoesBasicas({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label="Categoria">
           {!criandoCategoria ? (
-            <select
-              value={categoriaSelecionada}
-              onChange={(e) => {
-                if (e.target.value === "nova") {
-                  setCriandoCategoria(true);
-                } else {
-                  setCategoriaSelecionada(
+            <div className="space-y-2">
+              <select
+                value={categoriaSelecionada}
+                onChange={(e) =>
+                  onCategoriaChange(
                     e.target.value ? Number(e.target.value) : ""
-                  );
+                  )
                 }
-              }}
-              className={inputBase}
-            >
-              <option value="">Selecione uma categoria</option>
+                className={inputBase}
+              >
+                <option value="">Selecione uma categoria</option>
 
-              {categorias.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.nome}
-                </option>
-              ))}
+                {categorias.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.nome}
+                  </option>
+                ))}
+              </select>
 
-              <option value="nova">Nova categoria +</option>
-            </select>
+              <button
+                type="button"
+                onClick={() => setCriandoCategoria(true)}
+                className="text-sm font-medium text-brand hover:underline"
+              >
+                + Criar nova categoria
+              </button>
+            </div>
           ) : (
             <div className="rounded-md border border-default bg-surface-muted p-4 space-y-3">
               <input
@@ -104,7 +106,9 @@ export default function InformacoesBasicas({
                       headers: {
                         "Content-Type": "application/json",
                       },
-                      body: JSON.stringify({ nome: novaCategoria }),
+                      body: JSON.stringify({
+                        nome: novaCategoria,
+                      }),
                     });
 
                     if (!res.ok) {
@@ -115,7 +119,8 @@ export default function InformacoesBasicas({
                     const categoriaCriada = await res.json();
 
                     setCategorias((prev) => [...prev, categoriaCriada]);
-                    setCategoriaSelecionada(categoriaCriada.id);
+
+                    onCategoriaChange(categoriaCriada.id);
 
                     setNovaCategoria("");
                     setCriandoCategoria(false);
@@ -143,27 +148,27 @@ export default function InformacoesBasicas({
         <Field label="Data de início">
           <input
             type="date"
-            name="data_inicio"
-            defaultValue={valoresIniciais?.data_inicio}
+            value={valores.data_inicio}
+            onChange={(e) => onChange("data_inicio", e.target.value)}
             className={inputBase}
           />
         </Field>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Field label="Preço" required>
+        <Field label="Preço">
           <input
             type="number"
-            name="preco"
-            defaultValue={valoresIniciais?.preco}
+            value={valores.preco}
+            onChange={(e) => onChange("preco", Number(e.target.value))}
             className={inputBase}
           />
         </Field>
 
         <Field label="Moeda">
           <select
-            name="moeda"
-            defaultValue={valoresIniciais?.moeda ?? "EUR"}
+            value={valores.moeda}
+            onChange={(e) => onChange("moeda", e.target.value)}
             className={inputBase}
           >
             <option value="EUR">EUR</option>
@@ -178,9 +183,8 @@ export default function InformacoesBasicas({
         <label className="flex items-center gap-3 text-sm font-medium text-admin">
           <input
             type="checkbox"
-            name="destaque"
-            defaultChecked={valoresIniciais?.destaque}
-            className="h-4 w-4 rounded border-default text-brand focus:ring-brand"
+            checked={valores.destaque}
+            onChange={(e) => onChange("destaque", e.target.checked)}
           />
           Destacar este pacote na home
         </label>

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { pacotesMock } from "@/mocks/pacotes";
 import { formatarDataCurta } from "@/lib/formatarData";
+import { TipoFoto } from "@/generated/prisma";
 
 export type Order = "nome" | "data" | "preco-asc" | "preco-desc";
 
@@ -27,7 +28,7 @@ export async function getPacotesUi(order: Order) {
     orderBy,
     include: {
       fotos: {
-        where: { tipo: "CARD" },
+        where: { tipo: TipoFoto.CARD },
         take: 1,
       },
     },

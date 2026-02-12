@@ -93,12 +93,18 @@ export async function DELETE(
         throw new Error("Pacote não encontrado");
       }
 
+      const eraDestaque = pacote.destaque === true;
+
       await tx.pacote.delete({
         where: { id: pacoteId },
       });
 
-      if (pacote.destaque) {
+      if (eraDestaque) {
         const novoDestaque = await tx.pacote.findFirst({
+          where: {
+            id: { not: pacoteId },
+            deleted_at: null,
+          },
           orderBy: {
             created_at: "desc",
           },

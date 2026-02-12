@@ -4,6 +4,7 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { HeaderShell } from "../header/HeaderShell";
 import { MobileMenu } from "../header/MobileMenu";
+import { DesktopNav } from "../header/DesktopNav";
 
 export default function HeaderAdmin() {
   return (
@@ -70,24 +71,30 @@ export default function HeaderAdmin() {
       }
     >
       <div className="hidden lg:flex gap-x-6 items-center">
-        <Link
-          href="/admin"
-          className="text-sm font-semibold text-admin text-admin-hover"
-        >
-          Dashboard
-        </Link>
-        <Link
-          href="/admin/users"
-          className="text-sm font-semibold text-admin text-admin-hover"
-        >
-          Usuários
-        </Link>
-        <button
-          onClick={() => signOut({ callbackUrl: "/admin/login" })}
-          className="text-sm font-semibold text-danger text-danger-hover"
-        >
-          Logout
-        </button>
+        <DesktopNav
+          links={[
+            {
+              label: "Sobre nós",
+              href: "/sobre",
+              className: "text-sm font-semibold text-muted text-brand-hover",
+            },
+            {
+              label: "Pacotes",
+              href: "/admin/pacotes",
+              className: "text-sm font-semibold text-muted text-brand-hover",
+            },
+            {
+              label: "Categorias",
+              href: "/admin/categorias",
+              className: "text-sm font-semibold text-muted text-brand-hover",
+            },
+            {
+              label: "Contato",
+              href: "/contato",
+              className: "text-sm font-semibold text-muted text-brand-hover",
+            },
+          ]}
+        />
       </div>
     </HeaderShell>
   );

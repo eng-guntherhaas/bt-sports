@@ -5,6 +5,11 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import { TextStyle } from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
+import Link from "@tiptap/extension-link";
 
 type Props = {
   value: string;
@@ -17,9 +22,18 @@ export default function RichTextEditor({ value, onChange }: Props) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        heading: { levels: [2] },
+        heading: { levels: [1, 2, 3] },
       }),
+      Underline,
       Image,
+      TextStyle,
+      Color,
+      Link.configure({
+        openOnClick: false,
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
       Placeholder.configure({
         placeholder: "Comece a escrever seu conteúdo aqui…",
       }),
@@ -33,19 +47,37 @@ export default function RichTextEditor({ value, onChange }: Props) {
 
   if (!editor) return null;
 
-  const buttonBase =
-    "flex items-center justify-center h-9 px-3 rounded-md text-sm font-medium transition select-none";
+  const e = editor;
 
-  const buttonActive =
-    "bg-brand/15 text-brand border border-brand/40 shadow-sm";
+  const btn = "px-2 py-1 text-sm rounded hover:bg-brand/10 transition";
 
-  const buttonInactive = "text-brand/70 hover:bg-brand/10 hover:text-brand";
+  function addLink() {
+    const previousUrl = e.getAttributes("link").href || "";
+    const url = window.prompt("URL do link:", previousUrl);
+
+    if (url === null) return;
+
+    if (url === "") {
+      e.chain().focus().unsetLink().run();
+      return;
+    }
+
+    const normalized =
+      url.startsWith("http://") || url.startsWith("https://")
+        ? url
+        : `https://${url}`;
+
+    e.chain()
+      .focus()
+      .extendMarkRange("link")
+      .setLink({ href: normalized, target: "_blank" })
+      .run();
+  }
 
   function handleImageUpload(file: File) {
     const reader = new FileReader();
     reader.onload = () => {
-      editor
-        ?.chain()
+      e.chain()
         .focus()
         .setImage({ src: reader.result as string })
         .run();
@@ -54,121 +86,198 @@ export default function RichTextEditor({ value, onChange }: Props) {
   }
 
   return (
-    <div
-      onClick={() => editor?.commands.focus()}
-      className="
-        mt-2
-        rounded-md
-        border border-brand/40
-        bg-surface
-        cursor-text
-        transition
-        focus-within:border-brand
-        focus-within:ring-2
-        focus-within:ring-brand/30
-      "
-    >
-      <div className="flex flex-wrap items-center gap-1 border-b border-brand/20 bg-surface px-2 py-1">
+    <div className="mt-2 border rounded-md bg-surface">
+      <div className="flex flex-wrap gap-1 border-b p-2 bg-surface-muted">
         <button
           type="button"
-          title="Negrito"
-          onClick={() => editor?.chain().focus().toggleBold().run()}
-          className={`${buttonBase} ${
-            editor.isActive("bold") ? buttonActive : buttonInactive
-          }`}
+          onClick={() => e.chain().focus().toggleBold().run()}
+          className={btn}
         >
-          <span className="font-extrabold">B</span>
-        </button>
-        <button
-          type="button"
-          title="Itálico"
-          onClick={() => editor?.chain().focus().toggleItalic().run()}
-          className={`${buttonBase} ${
-            editor.isActive("italic") ? buttonActive : buttonInactive
-          }`}
-        >
-          <span className="italic font-semibold">I</span>
-        </button>
-
-        <div className="mx-1 h-5 w-px bg-brand/30" />
-
-        <button
-          type="button"
-          title="Título"
-          onClick={() =>
-            editor?.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          className={`${buttonBase} ${
-            editor.isActive("heading", { level: 2 })
-              ? buttonActive
-              : buttonInactive
-          }`}
-        >
-          Título
-        </button>
-
-        <div className="mx-1 h-5 w-px bg-brand/30" />
-
-        <button
-          type="button"
-          title="Lista com marcadores"
-          onClick={() => editor?.chain().focus().toggleBulletList().run()}
-          className={`${buttonBase} ${
-            editor.isActive("bulletList") ? buttonActive : buttonInactive
-          }`}
-        >
-          • Lista
+          <strong>B</strong>
         </button>
 
         <button
           type="button"
-          title="Lista numerada"
-          onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-          className={`${buttonBase} ${
-            editor.isActive("orderedList") ? buttonActive : buttonInactive
-          }`}
+          onClick={() => e.chain().focus().toggleItalic().run()}
+          className={btn}
         >
-          1. Lista
+          <em>I</em>
         </button>
-
-        <div className="mx-1 h-5 w-px bg-brand/30" />
 
         <button
           type="button"
-          title="Inserir imagem"
+          onClick={() => e.chain().focus().toggleUnderline().run()}
+          className={btn}
+        >
+          U
+        </button>
+
+        <button
+          type="button"
+          onClick={() => e.chain().focus().toggleStrike().run()}
+          className={btn}
+        >
+          S
+        </button>
+
+        <div className="w-px bg-border mx-2" />
+
+        <button
+          type="button"
+          onClick={() => e.chain().focus().setTextAlign("left").run()}
+          className={btn}
+        >
+          ⬅
+        </button>
+
+        <button
+          type="button"
+          onClick={() => e.chain().focus().setTextAlign("center").run()}
+          className={btn}
+        >
+          ⬌
+        </button>
+
+        <button
+          type="button"
+          onClick={() => e.chain().focus().setTextAlign("right").run()}
+          className={btn}
+        >
+          ➡
+        </button>
+
+        <div className="w-px bg-border mx-2" />
+
+        <input
+          type="color"
+          onChange={(ev) => e.chain().focus().setColor(ev.target.value).run()}
+          className="w-8 h-8"
+        />
+
+        <select
+          onChange={(ev) => {
+            const value = ev.target.value;
+
+            if (!value) {
+              e.chain().focus().setParagraph().run();
+              return;
+            }
+
+            const level = Number(value) as 1 | 2 | 3;
+
+            e.chain().focus().toggleHeading({ level }).run();
+          }}
+          className="text-sm border rounded px-1"
+        >
+          <option value="">Parágrafo</option>
+          <option value="1">H1</option>
+          <option value="2">H2</option>
+          <option value="3">H3</option>
+        </select>
+
+        <div className="w-px bg-border mx-2" />
+
+        <button
+          type="button"
+          onClick={() => e.chain().focus().toggleBulletList().run()}
+          className={btn}
+        >
+          •
+        </button>
+
+        <button
+          type="button"
+          onClick={() => e.chain().focus().toggleOrderedList().run()}
+          className={btn}
+        >
+          1.
+        </button>
+
+        <button
+          type="button"
+          onClick={addLink}
+          className={`${btn} ${
+            e.isActive("link") ? "bg-brand/20 text-brand" : ""
+          }`}
+        >
+          🔗
+        </button>
+
+        <button
+          type="button"
+          onClick={() => e.chain().focus().unsetLink().run()}
+          disabled={!e.isActive("link")}
+          className={`${btn} ${
+            e.isActive("link")
+              ? "text-danger hover:bg-danger/10"
+              : "opacity-40 cursor-not-allowed"
+          }`}
+        >
+          ✕🔗
+        </button>
+
+        <div className="w-px bg-border mx-2" />
+
+        <button
+          type="button"
+          onClick={() => e.chain().focus().undo().run()}
+          className={btn}
+        >
+          ↺
+        </button>
+
+        <button
+          type="button"
+          onClick={() => e.chain().focus().redo().run()}
+          className={btn}
+        >
+          ↻
+        </button>
+
+        <div className="w-px bg-border mx-2" />
+
+        <button
+          type="button"
           onClick={() => fileInputRef.current?.click()}
-          className={`${buttonBase} ${buttonInactive}`}
+          className={btn}
         >
-          🖼️ Inserir Imagem
+          🖼
         </button>
 
         <input
           ref={fileInputRef}
           type="file"
-          accept="image/*"
           hidden
-          onChange={(e) => {
-            const file = e.target.files?.[0];
+          accept="image/*"
+          onChange={(ev) => {
+            const file = ev.target.files?.[0];
             if (file) handleImageUpload(file);
           }}
         />
       </div>
 
       <EditorContent
-        editor={editor}
+        editor={e}
         className="
-          prose prose-admin max-w-none
-          p-4
-          min-h-65
-          leading-relaxed
-          text-text
-          caret-brand
-          outline-none
+    prose max-w-none
+    p-4
+    min-h-55
+    outline-none
 
-          [&_.ProseMirror]:text-text
-          [&_.ProseMirror]:focus:outline-none
-          [&_.ProseMirror-empty::before]:text-muted
-        "
+    [&_.ProseMirror]:text-text
+
+    [&_a]:text-brand
+    [&_a]:underline
+    [&_a]:decoration-2
+    [&_a]:underline-offset-2
+    [&_a]:decoration-brand/70
+    [&_a]:font-medium
+    [&_a]:transition
+
+    [&_a:hover]:text-brand-dark
+    [&_a:hover]:decoration-brand-dark
+    [&_a:hover]:cursor-pointer
+  "
       />
     </div>
   );
