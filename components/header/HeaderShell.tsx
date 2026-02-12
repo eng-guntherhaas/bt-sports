@@ -1,7 +1,18 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
+import CurrencyButton from "./CurrencyButton";
+
+type CurrentApi = {
+  bid: string;
+  pctChange: string;
+};
+
+type DailyItem = {
+  bid: string;
+  timestamp: string;
+};
 
 type Props = {
   logo: ReactNode;
@@ -18,40 +29,128 @@ export function HeaderShell({
   bgClass,
   borderClass,
 }: Props) {
-  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [currencyOpen, setCurrencyOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const [usd, setUsd] = useState({
+    current: null as CurrentApi | null,
+    history: [] as DailyItem[],
+  });
+
+  const [eur, setEur] = useState({
+    current: null as CurrentApi | null,
+    history: [] as DailyItem[],
+  });
+
+  async function fetchCurrency() {
+    try {
+      setLoading(true);
+      setError(false);
+
+      const [currentRes, usdHistRes, eurHistRes] = await Promise.all([
+        fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL", {
+          cache: "no-store",
+        }),
+        fetch("https://economia.awesomeapi.com.br/json/daily/USD-BRL/30"),
+        fetch("https://economia.awesomeapi.com.br/json/daily/EUR-BRL/30"),
+      ]);
+
+      const currentData = await currentRes.json();
+      const usdHist = await usdHistRes.json();
+      const eurHist = await eurHistRes.json();
+
+      setUsd({
+        current: currentData.USDBRL,
+        history: usdHist,
+      });
+
+      setEur({
+        current: currentData.EURBRL,
+        history: eurHist,
+      });
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (currencyOpen && !usd.current) {
+      fetchCurrency();
+    }
+  }, [currencyOpen]);
 
   return (
-    <header className={`${bgClass} border-b ${borderClass}`}>
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
-        {logo}
+    <>
+      <header className={`${bgClass} border-b ${borderClass}`}>
+        <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+          {logo}
 
-        {children}
-
-        <button onClick={() => setOpen(true)} className="lg:hidden text-muted">
-          ☰
-        </button>
-      </nav>
-
-      <Dialog
-        open={open}
-        onClose={setOpen}
-        className="lg:hidden fixed inset-0 z-50"
-      >
-        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-
-        <DialogPanel
-          className={`fixed inset-y-0 right-0 w-full sm:max-w-sm p-6 ${bgClass}`}
-        >
-          {mobileMenu}
+          <div className="hidden lg:flex items-center gap-x-6">
+            {children}
+            <button
+              onClick={() => setCurrencyOpen(true)}
+              className="text-sm font-semibold text-muted text-brand-hover px-3 py-2 rounded-lg hover-brand-soft transition focus-ring-brand"
+            >
+              Câmbio
+            </button>
+          </div>
 
           <button
-            onClick={() => setOpen(false)}
-            className="absolute top-6 right-6"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Abrir menu"
+            className="lg:hidden text-muted"
           >
-            ✕
+            ☰
           </button>
-        </DialogPanel>
-      </Dialog>
-    </header>
+        </nav>
+
+        <Dialog
+          open={menuOpen}
+          onClose={setMenuOpen}
+          className="lg:hidden fixed inset-0 z-50"
+        >
+          <div className="fixed inset-0 bg-black/30" />
+
+          <DialogPanel
+            className={`fixed inset-y-0 right-0 w-full sm:max-w-sm p-6 ${bgClass}`}
+          >
+            {mobileMenu}
+
+            <div className="mt-6">
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  setCurrencyOpen(true);
+                }}
+                className="block text-muted text-brand-hover"
+              >
+                Câmbio
+              </button>
+            </div>
+
+            <button
+              onClick={() => setMenuOpen(false)}
+              aria-label="Fechar menu"
+              className="absolute top-6 right-6"
+            >
+              ✕
+            </button>
+          </DialogPanel>
+        </Dialog>
+
+        <CurrencyButton
+          open={currencyOpen}
+          onClose={() => setCurrencyOpen(false)}
+          usd={usd}
+          eur={eur}
+          loading={loading}
+          error={error}
+        />
+      </header>
+    </>
   );
 }

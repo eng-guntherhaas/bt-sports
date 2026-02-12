@@ -17,7 +17,7 @@ export default async function PacotesPorCategoria({ slug }: Props) {
         },
         include: {
           fotos: {
-            where: { tipo: TipoFoto.CAPA },
+            where: { tipo: TipoFoto.CARD },
             take: 1,
           },
         },

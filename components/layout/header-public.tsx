@@ -31,6 +31,11 @@ export default function HeaderPublic() {
                   className: "block text-muted text-brand-hover",
                 },
                 {
+                  label: "Categorias",
+                  href: "/categorias",
+                  className: "block text-muted text-brand-hover",
+                },
+                {
                   label: "Contato",
                   href: "/contato",
                   className: "block text-muted text-brand-hover",
@@ -51,6 +56,11 @@ export default function HeaderPublic() {
           {
             label: "Pacotes",
             href: "/pacotes",
+            className: "text-sm font-semibold text-muted text-brand-hover",
+          },
+          {
+            label: "Categorias",
+            href: "/categorias",
             className: "text-sm font-semibold text-muted text-brand-hover",
           },
           {

@@ -136,10 +136,10 @@ CREATE UNIQUE INDEX "categorias_viagem_slug_key" ON "categorias_viagem"("slug");
 CREATE UNIQUE INDEX "pacotes_slug_key" ON "pacotes"("slug");
 
 -- CreateIndex
-CREATE INDEX "pacotes_categoria_id_idx" ON "pacotes"("categoria_id");
+CREATE UNIQUE INDEX "pacotes_destaque_key" ON "pacotes"("destaque");
 
 -- CreateIndex
-CREATE INDEX "pacotes_status_idx" ON "pacotes"("status");
+CREATE INDEX "pacotes_categoria_id_idx" ON "pacotes"("categoria_id");
 
 -- CreateIndex
 CREATE INDEX "pacotes_destaque_idx" ON "pacotes"("destaque");

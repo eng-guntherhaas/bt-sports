@@ -12,7 +12,7 @@ export async function getPacotesRecentes(limit = 6) {
       take: limit,
       include: {
         fotos: {
-          where: { tipo: TipoFoto.CAPA },
+          where: { tipo: TipoFoto.CARD },
           take: 1,
         },
       },

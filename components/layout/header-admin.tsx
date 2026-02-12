@@ -37,6 +37,11 @@ export default function HeaderAdmin() {
                   href: "/contato",
                   className: "block text-admin-hover",
                 },
+                {
+                  label: "Categorias",
+                  href: "/admin/categorias",
+                  className: "block text-admin-hover",
+                },
               ],
             },
             {
@@ -64,50 +69,25 @@ export default function HeaderAdmin() {
         />
       }
     >
-      <div className="hidden lg:flex items-center gap-x-8">
-        <div className="flex gap-x-6">
-          <Link
-            href="/sobre"
-            className="text-sm font-semibold text-admin-muted text-admin-hover"
-          >
-            Sobre nós
-          </Link>
-          <Link
-            href="/admin/pacotes"
-            className="text-sm font-semibold text-admin-muted text-admin-hover"
-          >
-            Pacotes
-          </Link>
-          <Link
-            href="/contato"
-            className="text-sm font-semibold text-admin-muted text-admin-hover"
-          >
-            Contato
-          </Link>
-        </div>
-
-        <div className="h-6 w-px bg-border-admin" />
-
-        <div className="flex gap-x-6 items-center">
-          <Link
-            href="/admin"
-            className="text-sm font-semibold text-admin text-admin-hover"
-          >
-            Dashboard
-          </Link>
-          <Link
-            href="/admin/users"
-            className="text-sm font-semibold text-admin text-admin-hover"
-          >
-            Usuários
-          </Link>
-          <button
-            onClick={() => signOut({ callbackUrl: "/admin/login" })}
-            className="text-sm font-semibold text-danger text-danger-hover"
-          >
-            Logout
-          </button>
-        </div>
+      <div className="hidden lg:flex gap-x-6 items-center">
+        <Link
+          href="/admin"
+          className="text-sm font-semibold text-admin text-admin-hover"
+        >
+          Dashboard
+        </Link>
+        <Link
+          href="/admin/users"
+          className="text-sm font-semibold text-admin text-admin-hover"
+        >
+          Usuários
+        </Link>
+        <button
+          onClick={() => signOut({ callbackUrl: "/admin/login" })}
+          className="text-sm font-semibold text-danger text-danger-hover"
+        >
+          Logout
+        </button>
       </div>
     </HeaderShell>
   );
